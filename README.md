@@ -1,2 +1,1 @@
-# bioinformatics-toolbox
-Bioinformatics Toobox
+# Bioinformatics Toobox
