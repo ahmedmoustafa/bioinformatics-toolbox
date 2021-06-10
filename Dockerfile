@@ -56,3 +56,36 @@ dos2unix
 
 ##########################################################################################
 ##########################################################################################
+# Progamming
+############
+############
+
+# BioPerl
+#########
+RUN apt-get -y install bioperl
+
+# Biopython
+###########
+RUN pip3 install --no-cache-dir -U biopython numpy pandas matplotlib scipy seaborn statsmodels plotly bokeh scikit-learn tensorflow keras torch theano jupyterlab
+
+# R
+###
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
+add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' && \
+apt-get update && \
+apt-get -y install r-base r-base-dev && \
+R -e "install.packages (c('tidyverse', 'tidylog', 'readr', 'dplyr', 'knitr', 'printr', 'rmarkdown', 'shiny', \
+'ggplot2', 'gplots', 'plotly', 'rbokeh', 'circlize', 'RColorBrewer', 'formattable', \
+'reshape2', 'data.table', 'readxl', 'devtools', 'cowplot', 'tictoc', 'ggpubr', 'patchwork', 'reticulate', \
+'rpart', 'rpart.plot', 'randomForest', 'randomForestExplainer', 'randomForestSRC', 'ggRandomForests', 'xgboost', 'gbm', 'iml', \
+'gganimate', 'gifski', 'av', 'magick', 'ggvis', 'googleVis', \
+'pheatmap', 'Rtsne', 'vsn', 'vegan', 'BiocManager'))" && \
+R -e "BiocManager::install(c('DESeq2', 'edgeR', 'dada2', 'phyloseq', 'metagenomeSeq', 'biomaRt'), ask = FALSE, update = TRUE)"
+
+##########################################################################################
+##########################################################################################
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+
+##########################################################################################
+##########################################################################################
