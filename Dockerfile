@@ -115,3 +115,69 @@ mv datasets /usr/local/bin/
 
 ##########################################################################################
 ##########################################################################################
+
+# Sequence Processing
+#####################
+#####################
+
+# FASTX
+#######
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/agordon/libgtextutils.git && cd $SETUPDIR/libgtextutils/ && \
+./reconf && ./configure && make && make install && \
+cd $SETUPDIR/ && \
+git clone https://github.com/agordon/fastx_toolkit.git && cd $SETUPDIR/fastx_toolkit && \
+wget -t 0 https://github.com/agordon/fastx_toolkit/files/1182724/fastx-toolkit-gcc7-patch.txt && \
+patch -p1 < fastx-toolkit-gcc7-patch.txt && \
+./reconf && ./configure && make && make install
+
+# Trimmomatic
+#############
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/timflutre/trimmomatic.git && \
+cd $SETUPDIR/trimmomatic && \
+make && make install INSTALL="/usr/local/"
+
+# SeqKit
+########
+RUN cd $SETUPDIR/ && \
+wget -t 0 https://github.com/shenwei356/seqkit/releases/download/v0.16.1/seqkit_linux_amd64.tar.gz && \
+tar zxvf seqkit_linux_amd64.tar.gz && \
+mv seqkit /usr/local/bin/
+
+# fastp
+#######
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/OpenGene/fastp.git && \
+cd $SETUPDIR/fastp && \
+make && make install
+
+# HTStream
+##########
+RUN cd $SETUPDIR/ && \
+wget -t 0 https://github.com/s4hts/HTStream/releases/download/v1.3.3/HTStream_v1.3.3.tar.gz && \
+tar zxvf HTStream_v1.3.3.tar.gz && \
+mv hts_* /usr/local/bin/
+
+# fqtrim
+########
+RUN cd $SETUPDIR/ && \
+wget -t 0 http://ccb.jhu.edu/software/fqtrim/dl/fqtrim-0.9.7.tar.gz && \
+tar zxvf fqtrim-0.9.7.tar.gz && \
+cd $SETUPDIR/fqtrim-0.9.7/ && \
+make && mv fqtrim /usr/local/bin/
+
+# seqmagick
+###########
+RUN pip3 install --no-cache-dir -U seqmagick
+
+# seqtk
+#######
+RUN git clone https://github.com/lh3/seqtk.git && \
+cd seqtk && \
+make && \
+mv seqtk /usr/local/bin/
+
+
+##########################################################################################
+##########################################################################################
