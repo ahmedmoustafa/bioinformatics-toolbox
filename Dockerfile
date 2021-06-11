@@ -179,6 +179,12 @@ cd seqtk && \
 make && \
 mv seqtk /usr/local/bin/
 
+# Parallel fastq-dump
+#####################
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/rvalieris/parallel-fastq-dump.git && \
+cd $SETUPDIR/parallel-fastq-dump/ && \
+mv parallel-fastq-dump /usr/local/bin/
 
 ##########################################################################################
 ##########################################################################################
@@ -191,6 +197,14 @@ mv seqtk /usr/local/bin/
 ###############
 RUN apt-get -y install ncbi-blast+ hmmer
 RUN cd $SETUPDIR/ && wget -t 0 http://github.com/bbuchfink/diamond/releases/download/v2.0.9/diamond-linux64.tar.gz && tar zxvf diamond-linux64.tar.gz && mv diamond /usr/local/bin/
+
+# CD-HIT
+########
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/weizhongli/cdhit.git && \
+cd $SETUPDIR/cdhit && \
+make && \
+make install
 
 ##########################################################################################
 ##########################################################################################
@@ -522,99 +536,7 @@ RUN cd $SETUPDIR/ && \
 wget -t 0 https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
 sh Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda3
 
-# CD-HIT
-########
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/weizhongli/cdhit.git && \
-cd $SETUPDIR/cdhit && \
-make && \
-make install
-
-# Parallel fastq-dump
-#####################
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/rvalieris/parallel-fastq-dump.git && \
-cd $SETUPDIR/parallel-fastq-dump/ && \
-mv parallel-fastq-dump /usr/local/bin/
-
-# MEGAHIT
-#########
-RUN cd $SETUPDIR/ && \
-wget https://github.com/voutcn/megahit/releases/download/v1.2.9/MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz && \
-tar zvxf MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz && \
-mv MEGAHIT-1.2.9-Linux-x86_64-static/bin/megahit /usr/local/bin/
-
 ##########################################################################################
 ##########################################################################################
-# Finishing
-###########
-###########
-# Removing /usr/local/lib/libgomp.so.1 (seems to be broken) and use /usr/lib/x86_64-linux-gnu/libgomp.so.1 instead
-RUN rm -fr /usr/local/lib/libgomp.so.1
 
-RUN cd $SETUPDIR/
-RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
-RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin" >> $SETUPDIR/init.sh
-RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
-RUN echo "echo '-----------------'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.0)'" >> $SETUPDIR/init.sh
-RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Maintained by Ahmed Moustafa (amoustafa@aucegypt.edu)'" >> $SETUPDIR/init.sh
-RUN echo "echo 'For a list of installed tools, please visit: '" >> $SETUPDIR/init.sh
-RUN echo "echo 'https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/master/Tools.md'" >> $SETUPDIR/init.sh
-RUN echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh
-RUN echo "echo '10.5281/zenodo.3723585'"  >> $SETUPDIR/init.sh
-RUN echo "echo 'Have fun!'" >> $SETUPDIR/init.sh
-RUN echo "echo ''" >> $SETUPDIR/init.sh
-RUN echo "echo ''" >> $SETUPDIR/init.sh
-RUN echo "/usr/bin/bash" >> $SETUPDIR/init.sh
-RUN echo "" >> $SETUPDIR/init.sh
-RUN mv $SETUPDIR/init.sh /etc/bioinformatics-toolbox.sh
-RUN chmod a+x /etc/bioinformatics-toolbox.sh
-
-WORKDIR /root/
-ENTRYPOINT ["/etc/bioinformatics-toolbox.sh"]
-RUN rm -fr $SETUPDIR
-
-# Versions
-##########
-RUN python --version ; \
-R --version ; \
-blastn -version ; \
-diamond --version ; \
-muscle -version ; \
-mafft --version ; \
-# tophat --version ; \
-hisat2 --version ; \
-bowtie2 --version ; \
-STAR --version ; \
-salmon --version ; \
-bbmap.sh --version ; \
-hts_Stats --version ; \
-treetime --version ; \
-# RUN FastTree
-# RUN phyml --version
-raxmlHPC -v ; \
-raxml-ng --version ; \
-pplacer --version ; \
-samtools  --version ; \
-bcftools  --version ; \
-bamtools --version ; \
-vcftools --version ; \
-bedtools --version ; \
-deeptools --version ; \
-bedops --version ; \
-spades.py --version ; \
-megahit --version ; \
-spades.py --version ; \
-seqkit version ; \
-fastp --version ; \
-fqtrim -V ; \
-seqmagick --version ; \
-docker --version ; \
-/usr/local/miniconda3/bin/conda --version
-
-##########################################################################################
-##########################################################################################
 
