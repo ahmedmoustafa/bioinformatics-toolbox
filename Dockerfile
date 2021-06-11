@@ -539,4 +539,74 @@ sh Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda3
 ##########################################################################################
 ##########################################################################################
 
+# Finishing
+###########
+###########
+# Removing /usr/local/lib/libgomp.so.1 (seems to be broken) and use /usr/lib/x86_64-linux-gnu/libgomp.so.1 instead
+RUN rm -fr /usr/local/lib/libgomp.so.1
 
+RUN cd $SETUPDIR/
+RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
+RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin" >> $SETUPDIR/init.sh
+RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
+RUN echo "echo '-----------------'" >> $SETUPDIR/init.sh
+RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.0)'" >> $SETUPDIR/init.sh
+RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
+RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
+RUN echo "echo 'Maintained by Ahmed Moustafa (amoustafa@aucegypt.edu)'" >> $SETUPDIR/init.sh
+RUN echo "echo 'For a list of installed tools, please visit: '" >> $SETUPDIR/init.sh
+RUN echo "echo 'https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/master/Tools.md'" >> $SETUPDIR/init.sh
+RUN echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh
+RUN echo "echo '10.5281/zenodo.3723585'"  >> $SETUPDIR/init.sh
+RUN echo "echo 'Have fun!'" >> $SETUPDIR/init.sh
+RUN echo "echo ''" >> $SETUPDIR/init.sh
+RUN echo "echo ''" >> $SETUPDIR/init.sh
+RUN echo "/usr/bin/bash" >> $SETUPDIR/init.sh
+RUN echo "" >> $SETUPDIR/init.sh
+RUN mv $SETUPDIR/init.sh /etc/bioinformatics-toolbox.sh
+RUN chmod a+x /etc/bioinformatics-toolbox.sh
+
+WORKDIR /root/
+ENTRYPOINT ["/etc/bioinformatics-toolbox.sh"]
+RUN rm -fr $SETUPDIR
+
+# Versions
+##########
+RUN python --version ; \
+R --version ; \
+blastn -version ; \
+diamond --version ; \
+muscle -version ; \
+mafft --version ; \
+# tophat --version ; \
+hisat2 --version ; \
+bowtie2 --version ; \
+STAR --version ; \
+salmon --version ; \
+bbmap.sh --version ; \
+hts_Stats --version ; \
+treetime --version ; \
+# RUN FastTree
+# RUN phyml --version
+raxmlHPC -v ; \
+raxml-ng --version ; \
+pplacer --version ; \
+samtools  --version ; \
+bcftools  --version ; \
+bamtools --version ; \
+vcftools --version ; \
+bedtools --version ; \
+deeptools --version ; \
+bedops --version ; \
+spades.py --version ; \
+megahit --version ; \
+spades.py --version ; \
+seqkit version ; \
+fastp --version ; \
+fqtrim -V ; \
+seqmagick --version ; \
+docker --version ; \
+/usr/local/miniconda3/bin/conda --version
+
+##########################################################################################
+##########################################################################################
