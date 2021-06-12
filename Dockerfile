@@ -8,7 +8,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 ##########################################################################################
 ##########################################################################################
 
-RUN apt-get update apt-get --fix-missing && \
+RUN apt-get update --fix-missing && \
 apt-get -y upgrade && \
 apt-get -y install apt-utils dialog software-properties-common
 
