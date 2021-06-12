@@ -1,3 +1,5 @@
+![Bioinformatics Toolbox](toolbox.png)
+
 # Bioinformatics Toobox
 
 `bioinformatics-toolbox` is a [Docker](https://www.docker.com/) container for common bioinformatics and genomics related tools.
