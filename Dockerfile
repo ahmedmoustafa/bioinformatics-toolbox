@@ -549,15 +549,19 @@ RUN cd $SETUPDIR/
 RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
 RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
-RUN echo "echo '-----------------'" >> $SETUPDIR/init.sh
+RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.0)'" >> $SETUPDIR/init.sh
 RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Maintained by Ahmed Moustafa (amoustafa@aucegypt.edu)'" >> $SETUPDIR/init.sh
+RUN echo "echo " >> $SETUPDIR/init.sh
 RUN echo "echo 'For a list of installed tools, please visit: '" >> $SETUPDIR/init.sh
 RUN echo "echo 'https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/master/Tools.md'" >> $SETUPDIR/init.sh
+RUN echo "echo " >> $SETUPDIR/init.sh
+RUN echo "echo 'If you would like to request adding certain tools or report a problem,'" >> $SETUPDIR/init.sh
+RUN echo "echo 'please submit an issue https://github.com/ahmedmoustafa/bioinformatics-toolbox/issues'" >> $SETUPDIR/init.sh
+RUN echo "echo " >> $SETUPDIR/init.sh
 RUN echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh
-RUN echo "echo '10.5281/zenodo.3723585'"  >> $SETUPDIR/init.sh
+RUN echo "echo '10.5281/zenodo.4936052'"  >> $SETUPDIR/init.sh
 RUN echo "echo 'Have fun!'" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
