@@ -29,6 +29,8 @@ The size of the built image is about 16 GB.
 
 ## Citation
 
-If you use `bioinformatics-toolbox` in your work, please cite [![DOI](https://zenodo.org/badge/375832205.svg)](https://zenodo.org/badge/latestdoi/375832205)
+If you use `bioinformatics-toolbox` in your work, please cite DOI [10.5281/zenodo.4936052](https://doi.org/10.5281/zenodo.4936052)
+
+[![DOI](https://zenodo.org/badge/375832205.svg)](https://zenodo.org/badge/latestdoi/375832205)
 
 ---
