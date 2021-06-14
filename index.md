@@ -1,37 +1,34 @@
-## Welcome to GitHub Pages
+## Bioinformatics Toolbox
 
-You can use the [editor on GitHub](https://github.com/ahmedmoustafa/bioinformatics-toolbox/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+`bioinformatics-toolbox` is a [Docker](https://www.docker.com/) container for common bioinformatics and genomics related tools.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The list of the installed tools and packages can be found [here](Tools.md)
 
-### Markdown
+## Installation
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Option 1: Pulling from GitHub Registry (Recommended)
 
-```markdown
-Syntax highlighted code block
+The built image can be downloaded as follows:
 
-# Header 1
-## Header 2
-### Header 3
+`sudo docker run -it ghcr.io/ahmedmoustafa/bioinformatics-tools /bin/bash`
 
-- Bulleted
-- List
+### Option 2: Building from the `Dockerfile`
 
-1. Numbered
-2. List
+`git clone https://github.com/ahmedmoustafa/bioinformatics-toolbox.git`
 
-**Bold** and _Italic_ and `Code` text
+`cd bioinformatics-toolbox/`
 
-[Link](url) and ![Image](src)
-```
+`sudo docker build -t bioinformatics-toolbox .`
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+`sudo docker run -it bioinformatics-toolbox`
 
-### Jekyll Themes
+### Note
+The size of the image is about 16 GB.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ahmedmoustafa/bioinformatics-toolbox/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Citation
 
-### Support or Contact
+If you use `bioinformatics-toolbox` in your work, please cite DOI [10.5281/zenodo.4936052](https://doi.org/10.5281/zenodo.4936052)
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+[![DOI](https://zenodo.org/badge/375832205.svg)](https://zenodo.org/badge/latestdoi/375832205)
+
+---
