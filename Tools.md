@@ -1,4 +1,4 @@
-# Tools the Bioinformatics Toolbox
+# Tools in the Bioinformatics Toolbox
 
 | Tool | Description |
 | ---- | ----------- |
