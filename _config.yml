@@ -1,1 +1,4 @@
 theme: jekyll-theme-minimal
+logo: https://upload.wikimedia.org/wikipedia/commons/6/64/Tool_box_icon-01.svg
+show_downloads: "true"
+google_analytics: [Your Google Analytics tracking ID]
