@@ -534,12 +534,12 @@ RUN deepbgc download
 
 # antiSMASH
 ###########
-RUN apt-get update && \
-apt-get -y install apt-transport-https
-RUN wget http://dl.secondarymetabolites.org/antismash-stretch.list -O /etc/apt/sources.list.d/antismash.list && \
-wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | sudo apt-key add -
-RUN apt-get update && \
-apt-get -y install hmmer2 hmmer diamond-aligner fasttree prodigal ncbi-blast+ muscle glimmerhmm
+RUN apt-get update
+RUN apt-get -y install apt-transport-https
+RUN wget http://dl.secondarymetabolites.org/antismash-stretch.list -O /etc/apt/sources.list.d/antismash.list
+RUN wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | sudo apt-key add -
+RUN apt-get update
+RUN apt-get -y install hmmer2 hmmer diamond-aligner fasttree prodigal ncbi-blast+ muscle glimmerhmm
 
 ##########################################################################################
 ##########################################################################################
