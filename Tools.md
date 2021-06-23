@@ -48,6 +48,7 @@
 | [MetaVelvet](http://metavelvet.dna.bio.keio.ac.jp/) | [MetaVelvet: an extension of Velvet assembler to de novo metagenome assembly from short sequence reads](https://www.ncbi.nlm.nih.gov/pubmed/22821567) |
 | [Prodigal](https://github.com/hyattpd/Prodigal) | [Prodigal: prokaryotic gene recognition and translation initiation site identification](https://www.ncbi.nlm.nih.gov/pubmed/20211023) |
 | [Infernal](http://eddylab.org/infernal/) | [inference of RNA alignments](https://www.ncbi.nlm.nih.gov/pubmed/24008419) |
+| [antiSMASH](https://antismash.secondarymetabolites.org/) | [antiSMASH: Rapid identification, annotation and analysis of secondary metabolite biosynthesis gene clusters](https://pubmed.ncbi.nlm.nih.gov/21672958/) |
 | [DeepBGC](https://github.com/Merck/deepbgc) | [A deep learning genome-mining strategy for biosynthetic gene cluster prediction](https://www.ncbi.nlm.nih.gov/pubmed/31400112) |
 | [GECCO](https://gecco.embl.de/) | [Accurate de novo identification of biosynthetic gene clusters with GECCO](https://doi.org/10.1101/2021.05.03.442509) |
 | [Docker](https://www.docker.com/) | |
