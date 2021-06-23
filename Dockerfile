@@ -529,7 +529,6 @@ add-apt-repository ppa:deadsnakes/ppa && \
 apt install python3.7 && \
 python3.7 -m pip install deepbgc deepbgc[hmm] && \
 deepbgc download
-deepbgc info
 
 
 ##########################################################################################
