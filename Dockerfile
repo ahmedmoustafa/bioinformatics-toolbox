@@ -527,7 +527,7 @@ RUN apt-get update && \
 apt-get -y install software-properties-common && \
 add-apt-repository ppa:deadsnakes/ppa && \
 apt-get -y install python3.7
-RUN python3.7 -m pip install deepbgc deepbgc[hmm]
+RUN python3.7 -m pip install kiwisolver deepbgc deepbgc[hmm] --force
 RUN deepbgc download
 
 ##########################################################################################
