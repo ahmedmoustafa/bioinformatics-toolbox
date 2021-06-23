@@ -49,9 +49,7 @@
 | [Prodigal](https://github.com/hyattpd/Prodigal) | [Prodigal: prokaryotic gene recognition and translation initiation site identification](https://www.ncbi.nlm.nih.gov/pubmed/20211023) |
 | [Infernal](http://eddylab.org/infernal/) | [inference of RNA alignments](https://www.ncbi.nlm.nih.gov/pubmed/24008419) |
 | [DeepBGC](https://github.com/Merck/deepbgc) | [A deep learning genome-mining strategy for biosynthetic gene cluster prediction](https://www.ncbi.nlm.nih.gov/pubmed/31400112) |
+| [GECCO](https://gecco.embl.de/) | [Accurate de novo identification of biosynthetic gene clusters with GECCO](https://doi.org/10.1101/2021.05.03.442509) |
 | [Docker](https://www.docker.com/) | |
 | [Miniconda](https://docs.conda.io/en/latest/) | |
 | [CD-HIT](https://github.com/weizhongli/cdhit) | [Cd-hit: a fast program for clustering and comparing large sets of protein or nucleotide sequences](https://www.ncbi.nlm.nih.gov/pubmed/16731699) |
-| [DeepBGC](https://github.com/Merck/deepbgc) | [A deep learning genome-mining strategy for biosynthetic gene cluster prediction](https://pubmed.ncbi.nlm.nih.gov/31400112/) |
-| [GECCO](https://gecco.embl.de/) | [Accurate de novo identification of biosynthetic gene clusters with GECCO](https://doi.org/10.1101/2021.05.03.442509) |
-
