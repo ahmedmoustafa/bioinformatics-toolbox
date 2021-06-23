@@ -527,8 +527,8 @@ RUN apt update && \
 apt install software-properties-common && \
 add-apt-repository ppa:deadsnakes/ppa && \
 apt install python3.7 && \
-python3.7 -m pip install deepbgc deepbgc[hmm] && \
-deepbgc download
+python3.7 -m pip install deepbgc deepbgc[hmm]
+RUN deepbgc download
 
 
 ##########################################################################################
