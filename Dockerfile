@@ -541,6 +541,11 @@ wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | apt-key add -
 RUN apt-get update && \
 apt-get -y install hmmer2 hmmer diamond-aligner fasttree prodigal ncbi-blast+ muscle glimmerhmm
 
+RUN cd $SETUPDIR/
+RUN wget https://dl.secondarymetabolites.org/releases/6.0.0/antismash-6.0.0.tar.gz && tar -zxf antismash-6.0.0.tar.gz
+RUN pip install ./antismash-6.0.0
+RUN download-antismash-databases
+
 ##########################################################################################
 ##########################################################################################
 
