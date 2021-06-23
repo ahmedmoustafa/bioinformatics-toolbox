@@ -517,6 +517,21 @@ tar zxvf infernal-1.1.4.tar.gz && \
 cd $SETUPDIR/infernal-1.1.4/ && \
 ./configure && make && make install
 
+# GECCO
+#######
+RUN pip install gecco-tool
+
+# DeepBGC
+#########
+RUN apt update && \
+apt install software-properties-common && \
+add-apt-repository ppa:deadsnakes/ppa && \
+apt install python3.7 && \
+python3.7 -m pip install deepbgc deepbgc[hmm] && \
+deepbgc download
+deepbgc info
+
+
 ##########################################################################################
 ##########################################################################################
 
@@ -550,7 +565,7 @@ RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
 RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
 RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.0)'" >> $SETUPDIR/init.sh
+RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.1)'" >> $SETUPDIR/init.sh
 RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
@@ -610,6 +625,8 @@ fastp --version ; \
 fqtrim -V ; \
 seqmagick --version ; \
 docker --version ; \
+gecco --version ; \
+deepbgc info ; \
 /usr/local/miniconda3/bin/conda --version
 
 ##########################################################################################
