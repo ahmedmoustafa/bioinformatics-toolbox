@@ -523,10 +523,10 @@ RUN pip install gecco-tool
 
 # DeepBGC
 #########
-RUN apt update && \
-apt install software-properties-common && \
+RUN apt-get update && \
+apt-get install software-properties-common && \
 add-apt-repository ppa:deadsnakes/ppa && \
-apt install python3.7
+apt-get install python3.7
 RUN python3.7 -m pip install deepbgc deepbgc[hmm]
 RUN deepbgc download
 
