@@ -569,7 +569,7 @@ sh Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda3
 #########
 RUN cd $SETUPDIR/ && \
 wget -qO- https://get.nextflow.io | bash && \
-chmod +x nextflow \
+chmod +x nextflow && \
 mv nextflow /usr/local/bin/
 
 ##########################################################################################
