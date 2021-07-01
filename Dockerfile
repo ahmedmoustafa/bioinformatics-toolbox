@@ -565,6 +565,13 @@ RUN cd $SETUPDIR/ && \
 wget -t 0 https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
 sh Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda3
 
+# Nexflow
+#########
+RUN cd $SETUPDIR/ && \
+wget -qO- https://get.nextflow.io | bash && \
+chmod +x nextflow \
+mv nextflow /usr/local/bin/
+
 ##########################################################################################
 ##########################################################################################
 
@@ -641,7 +648,8 @@ seqmagick --version ; \
 docker --version ; \
 gecco --version ; \
 deepbgc info ; \
-/usr/local/miniconda3/bin/conda --version
+/usr/local/miniconda3/bin/conda --version \
+nextflow self-update
 
 ##########################################################################################
 ##########################################################################################
