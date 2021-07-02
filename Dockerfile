@@ -645,11 +645,11 @@ seqkit version ; \
 fastp --version ; \
 fqtrim -V ; \
 seqmagick --version ; \
-docker --version ; \
 gecco --version ; \
 deepbgc info ; \
-/usr/local/miniconda3/bin/conda --version \
-nextflow self-update
+docker --version ; \
+/usr/local/miniconda3/bin/conda --version ; \
+nextflow nextflow -version
 
 ##########################################################################################
 ##########################################################################################
