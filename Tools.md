@@ -54,3 +54,4 @@
 | [Docker](https://www.docker.com/) | |
 | [Miniconda](https://docs.conda.io/en/latest/) | |
 | [CD-HIT](https://github.com/weizhongli/cdhit) | [Cd-hit: a fast program for clustering and comparing large sets of protein or nucleotide sequences](https://www.ncbi.nlm.nih.gov/pubmed/16731699) |
+| [Nextflow](https://www.nextflow.io/) | [Nextflow enables reproducible computational workflows](https://pubmed.ncbi.nlm.nih.gov/28398311/) |
