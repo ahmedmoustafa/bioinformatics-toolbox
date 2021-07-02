@@ -649,7 +649,7 @@ gecco --version ; \
 deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
-nextflow nextflow -version
+nextflow -version
 
 ##########################################################################################
 ##########################################################################################
