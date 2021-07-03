@@ -34,7 +34,7 @@ RUN apt-get -y install vim nano emacs rsync curl wget screen htop parallel gnupg
 build-essential libtool autotools-dev automake autoconf cmake \
 libboost-dev libboost-all-dev libboost-system-dev libboost-program-options-dev libboost-iostreams-dev libboost-filesystem-dev \
 gfortran libgfortran5 \
-default-jre default-jdk ant \
+openjdk-8* ant \
 python3 python3-dev python3-pip python3-venv \
 libssl-dev libcurl4-openssl-dev \
 libxml2-dev \
@@ -52,7 +52,8 @@ cargo \
 ffmpeg \
 libmagick++-dev \
 libavfilter-dev \
-dos2unix
+dos2unix \
+git-lfs
 
 ##########################################################################################
 ##########################################################################################
@@ -572,6 +573,14 @@ wget -qO- https://get.nextflow.io | bash && \
 chmod +x nextflow && \
 mv nextflow /usr/local/bin/
 
+# GATK
+######
+RUN mkdir -p /apps/ && \
+cd /apps/ && \
+git clone https://github.com/broadinstitute/gatk.git
+cd /apps/gatk && \
+./gradlew
+
 ##########################################################################################
 ##########################################################################################
 
@@ -649,7 +658,8 @@ gecco --version ; \
 deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
-nextflow -version
+nextflow -version ; \
+/apps/gatk/gatk --list
 
 ##########################################################################################
 ##########################################################################################
