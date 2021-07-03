@@ -577,7 +577,7 @@ mv nextflow /usr/local/bin/
 ######
 RUN mkdir -p /apps/ && \
 cd /apps/ && \
-git clone https://github.com/broadinstitute/gatk.git
+git clone https://github.com/broadinstitute/gatk.git && \
 cd /apps/gatk && \
 ./gradlew
 
