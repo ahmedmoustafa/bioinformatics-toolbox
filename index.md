@@ -24,7 +24,7 @@ The built image can be downloaded as follows:
 
 ### Notes
 - The size of the image is about **30 GB**.
-- Building the image (option #2) from the `Dockerfile` takes about **six hours** on a Google Cloud machine type **e2-medium** in zone **us-west2-a**.
+- Building the image (option #2) from the [`Dockerfile`](https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/main/Dockerfile) takes about **six hours** on a Google Cloud machine type [**e2-medium**](https://cloud.google.com/compute/docs/machine-types) in zone [**us-west2-a**](https://cloud.google.com/compute/docs/regions-zones).
 
 ## Citation
 
