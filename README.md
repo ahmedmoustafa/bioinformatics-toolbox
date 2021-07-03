@@ -24,8 +24,9 @@ The built image can be downloaded as follows:
 
 `sudo docker run -it bioinformatics-toolbox`
 
-### Note
-The size of the image is about 30 GB.
+### Notes
+- The size of the image is about **30 GB**.
+- Building the image (option #2) from the `Dockerfile` takes about **six hours** on a Google Cloud machine type **e2-medium** in zone **us-west2-a**.
 
 ## Citation
 
