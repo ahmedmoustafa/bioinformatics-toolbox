@@ -592,7 +592,7 @@ RUN rm -fr /usr/local/lib/libgomp.so.1
 
 RUN cd $SETUPDIR/
 RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
-RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin" >> $SETUPDIR/init.sh
+RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
 RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.1)'" >> $SETUPDIR/init.sh
@@ -659,6 +659,7 @@ deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version ; \
+/apps/gatk/gatk --list
 
 ##########################################################################################
 ##########################################################################################
