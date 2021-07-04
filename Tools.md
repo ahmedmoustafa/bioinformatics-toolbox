@@ -55,3 +55,4 @@
 | [Miniconda](https://docs.conda.io/en/latest/) | |
 | [CD-HIT](https://github.com/weizhongli/cdhit) | [Cd-hit: a fast program for clustering and comparing large sets of protein or nucleotide sequences](https://www.ncbi.nlm.nih.gov/pubmed/16731699) |
 | [Nextflow](https://www.nextflow.io/) | [Nextflow enables reproducible computational workflows](https://pubmed.ncbi.nlm.nih.gov/28398311/) |
+| [GATK](https://gatk.broadinstitute.org/hc/en-us) | [The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data](https://pubmed.ncbi.nlm.nih.gov/20644199/) |
