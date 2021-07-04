@@ -1,3 +1,5 @@
+{% include gtag.js %}
+
 ## Bioinformatics Toolbox
 
 `bioinformatics-toolbox` is a [Docker](https://www.docker.com/) container for common bioinformatics and genomics related tools.
