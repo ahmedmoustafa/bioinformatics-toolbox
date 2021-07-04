@@ -1,3 +1,5 @@
+{% include gtag.js %}
+
 # Tools in the Bioinformatics Toolbox
 
 | Tool | Description |
