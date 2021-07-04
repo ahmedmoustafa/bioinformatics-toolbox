@@ -675,8 +675,8 @@ fqtrim -V ; \
 seqmagick --version ; \
 gecco --version ; \
 deepbgc info ; \
-gatk --list ; \
-igv.sh --version ; \
+/apps/gatk/gatk --list ; \
+/apps/IGV/igv.sh --version ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version ; \
