@@ -595,7 +595,7 @@ cd /apps/gatk && \
 # IGV
 #####
 RUN cd /apps/ && \
-RUN wget -t 0 https://data.broadinstitute.org/igv/projects/downloads/snapshot/IGV_Linux_snapshot_WithJava.zip && \
+wget -t 0 https://data.broadinstitute.org/igv/projects/downloads/snapshot/IGV_Linux_snapshot_WithJava.zip && \
 unzip IGV_Linux_snapshot_WithJava.zip && \
 mv IGV_Linux_snapshot IGV
 
