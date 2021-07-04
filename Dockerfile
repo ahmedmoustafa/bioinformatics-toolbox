@@ -30,15 +30,11 @@ WORKDIR $SETUPDIR
 ###############
 ###############
 
-# Removing default openjdk because of GATK's requirement for an old version of Java.
-RUN apt-get -y purge openjdk*
-# Installing openjdk 8
-RUN apt-get -y install openjdk-8* ant
-
 RUN apt-get -y install vim nano emacs rsync curl wget screen htop parallel gnupg lsof git locate unrar bc aptitude unzip bison flex \
 build-essential libtool autotools-dev automake autoconf cmake \
 libboost-dev libboost-all-dev libboost-system-dev libboost-program-options-dev libboost-iostreams-dev libboost-filesystem-dev \
 gfortran libgfortran5 \
+default-jre default-jdk ant \
 python3 python3-dev python3-pip python3-venv \
 libssl-dev libcurl4-openssl-dev \
 libxml2-dev \
@@ -577,8 +573,19 @@ wget -qO- https://get.nextflow.io | bash && \
 chmod +x nextflow && \
 mv nextflow /usr/local/bin/
 
+##########################################################################################
+##########################################################################################
+
+# Variant Calling
+#################
+#################
+
 # GATK
 ######
+# Removing default openjdk because of GATK's requirement for an old version of Java.
+RUN apt-get -y purge openjdk*
+# Installing openjdk 8
+RUN apt-get -y install openjdk-8* ant
 RUN mkdir -p /apps/ && \
 cd /apps/ && \
 git clone https://github.com/broadinstitute/gatk.git && \
