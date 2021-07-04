@@ -659,7 +659,7 @@ deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version ; \
-/apps/gatk/gatk --list
+java -version
 
 ##########################################################################################
 ##########################################################################################
