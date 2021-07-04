@@ -30,6 +30,9 @@ WORKDIR $SETUPDIR
 ###############
 ###############
 
+# Removing default openjdk because of GATK's requirement for an old version of Java.
+RUN apt-get -y purge openjdk*
+# Installing openjdk 8
 RUN apt-get -y install openjdk-8* ant
 
 RUN apt-get -y install vim nano emacs rsync curl wget screen htop parallel gnupg lsof git locate unrar bc aptitude unzip bison flex \
