@@ -624,7 +624,7 @@ RUN echo "echo 'If you would like to request adding certain tools or report a pr
 RUN echo "echo 'please submit an issue https://github.com/ahmedmoustafa/bioinformatics-toolbox/issues'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
 RUN echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh
-RUN echo "echo '10.5281/zenodo.4936052'"  >> $SETUPDIR/init.sh
+RUN echo "echo '10.5281/zenodo.5069735'"  >> $SETUPDIR/init.sh
 RUN echo "echo 'Have fun!'" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
