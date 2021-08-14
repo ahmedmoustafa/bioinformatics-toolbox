@@ -601,7 +601,7 @@ mv IGV_Linux_snapshot IGV
 
 # VEP
 #####
-RUN apt-get -y install cpanminus
+RUN apt-get -y install cpanminus libtry-tiny-perl
 RUN cpanm Module::Build
 RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
 cd ensembl-vep && \
