@@ -601,14 +601,15 @@ mv IGV_Linux_snapshot IGV
 
 # VEP
 #####
-# RUN apt-get -y install cpanminus libtry-tiny-perl
-# RUN PERL5LIB=/opt/gris/perl5/lib/perl5/
-# RUN cpanm Module::Build
-# RUN cpanm autodie
-# RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
-# cd ensembl-vep && \
-# perl INSTALL.pl && \
-# mv vep /usr/local/bin/ 
+RUN cd /apps/ && \
+apt-get -y install cpanminus libtry-tiny-perl libperl4-corelibs-perl && \
+cpanm autodie && \
+cpanm Module::Build && \
+cpanm Bio::DB::HTS::Tabix && \
+git clone https://github.com/Ensembl/ensembl-vep.git && \
+cd ensembl-vep && \
+perl INSTALL.pl --NO_HTSLIB --AUTO alcfp --SPECIES homo_sapiens --ASSEMBLY GRCh38 --PLUGINS all
+
 
 ##########################################################################################
 ##########################################################################################
@@ -621,7 +622,7 @@ RUN rm -fr /usr/local/lib/libgomp.so.1
 
 RUN cd $SETUPDIR/
 RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
-RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV" >> $SETUPDIR/init.sh
+RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
 RUN echo "echo '----------------------------------------'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.1)'" >> $SETUPDIR/init.sh
@@ -691,7 +692,7 @@ deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version ; \
-# vep --version 
+/apps/ensembl-vep/vep
 
 ##########################################################################################
 ##########################################################################################
