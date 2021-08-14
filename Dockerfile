@@ -601,8 +601,7 @@ mv IGV_Linux_snapshot IGV
 
 # VEP
 #####
-RUN perl -MCPAN -e "Module::Build"
-RUN perl -MCPAN -e "Bio::DB"
+RUN cpanm Module::Build
 RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
 cd ensembl-vep && \
 perl INSTALL.pl && \
