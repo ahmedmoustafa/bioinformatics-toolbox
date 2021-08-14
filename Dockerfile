@@ -599,6 +599,13 @@ wget -t 0 https://data.broadinstitute.org/igv/projects/downloads/snapshot/IGV_Li
 unzip IGV_Linux_snapshot_WithJava.zip && \
 mv IGV_Linux_snapshot IGV
 
+# VEP
+#####
+RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
+cd ensembl-vep \ && 
+perl INSTALL.pl \ &&
+mv vep /usr/local/bin/ 
+
 ##########################################################################################
 ##########################################################################################
 
@@ -680,6 +687,7 @@ deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version ; \
+vep --version 
 
 ##########################################################################################
 ##########################################################################################
