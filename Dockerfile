@@ -602,8 +602,8 @@ mv IGV_Linux_snapshot IGV
 # VEP
 #####
 RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
-cd ensembl-vep \ && 
-perl INSTALL.pl \ &&
+cd ensembl-vep && \
+perl INSTALL.pl && \
 mv vep /usr/local/bin/ 
 
 ##########################################################################################
