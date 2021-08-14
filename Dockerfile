@@ -601,14 +601,14 @@ mv IGV_Linux_snapshot IGV
 
 # VEP
 #####
-RUN apt-get -y install cpanminus libtry-tiny-perl
-RUN PERL5LIB=/opt/gris/perl5/lib/perl5/
-RUN cpanm Module::Build
-RUN cpanm autodie
-RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
-cd ensembl-vep && \
-perl INSTALL.pl && \
-mv vep /usr/local/bin/ 
+# RUN apt-get -y install cpanminus libtry-tiny-perl
+# RUN PERL5LIB=/opt/gris/perl5/lib/perl5/
+# RUN cpanm Module::Build
+# RUN cpanm autodie
+# RUN git clone https://github.com/Ensembl/ensembl-vep.git && \
+# cd ensembl-vep && \
+# perl INSTALL.pl && \
+# mv vep /usr/local/bin/ 
 
 ##########################################################################################
 ##########################################################################################
@@ -691,7 +691,7 @@ deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version ; \
-vep --version 
+# vep --version 
 
 ##########################################################################################
 ##########################################################################################
