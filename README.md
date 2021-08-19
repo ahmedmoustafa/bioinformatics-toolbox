@@ -12,17 +12,27 @@ The list of the installed tools and packages can be found [here](Tools.md)
 
 The built image can be downloaded as follows:
 
-`sudo docker run -it ghcr.io/ahmedmoustafa/bioinformatics-toolbox /bin/bash`
+```bash
+sudo docker run -it ghcr.io/ahmedmoustafa/bioinformatics-toolbox /bin/bash
+```
 
 ### Option 2: Building from the `Dockerfile`
 
-`git clone https://github.com/ahmedmoustafa/bioinformatics-toolbox.git`
+```bash
+git clone https://github.com/ahmedmoustafa/bioinformatics-toolbox.git
+```
 
-`cd bioinformatics-toolbox/`
+```bash
+cd bioinformatics-toolbox/
+```
 
-`sudo docker build -t bioinformatics-toolbox .`
+```bash
+sudo docker build -t bioinformatics-toolbox .
+```
 
-`sudo docker run -it bioinformatics-toolbox`
+```bash
+sudo docker run -it bioinformatics-toolbox
+```
 
 ### Notes
 - The size of the image is about **40 GB**.
