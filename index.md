@@ -12,7 +12,7 @@ The list of the installed tools and packages can be found [here](Tools.md)
 
 The built image can be downloaded as follows:
 
-`sudo docker run -it ghcr.io/ahmedmoustafa/bioinformatics-tools /bin/bash`
+`sudo docker run -it ghcr.io/ahmedmoustafa/bioinformatics-toolbox /bin/bash`
 
 ### Option 2: Building from the `Dockerfile`
 
