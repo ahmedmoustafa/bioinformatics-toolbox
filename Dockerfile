@@ -338,7 +338,7 @@ autoreconf -i ; git submodule update --init --recursive ; ./configure ; make ; m
 # Samtools
 ##########
 RUN cd $SETUPDIR/ && \
-git clone git://github.com/samtools/samtools.git && \
+git clone https://github.com/samtools/samtools.git && \
 cd $SETUPDIR/samtools && \
 autoheader ; autoconf ; ./configure ; make ; make install
 
@@ -353,7 +353,7 @@ autoheader ; autoconf ; ./configure ; make ; make install
 # Bamtools
 ##########
 RUN cd $SETUPDIR/ && \
-git clone git://github.com/pezmaster31/bamtools.git && \
+git clone https://github.com/pezmaster31/bamtools.git && \
 cd $SETUPDIR/bamtools && \
 mkdir build && \
 cd $SETUPDIR/bamtools/build && \
