@@ -310,7 +310,9 @@ mv $SETUPDIR/salmon-latest_linux_x86_64/lib/* /usr/local/lib/
 # cd $SETUPDIR/kallisto/build && \
 # cmake .. && make && make install && \
 # R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
-RUN apt-get install kallisto
+RUN apt-get install kallisto && \
+R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
+
 
 # BBMap
 #######
