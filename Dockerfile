@@ -547,7 +547,6 @@ RUN apt-get update && \
 apt-get -y install software-properties-common && \
 add-apt-repository ppa:deadsnakes/ppa && \
 apt-get install -y python3-distutils python3-apt
-RUN pip install distutils
 RUN pip install kiwisolver --force
 RUN pip install deepbgc
 RUN pip install deepbgc[hmm]
