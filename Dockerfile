@@ -546,10 +546,10 @@ RUN pip install gecco-tool
 RUN apt-get update && \
 apt-get -y install software-properties-common && \
 add-apt-repository ppa:deadsnakes/ppa && \
-apt-get -y python3-distutils python3-apt
+apt-get install -y python3-distutils python3-apt
 RUN pip install distutils
 RUN pip install kiwisolver --force
-RUN ip install deepbgc
+RUN pip install deepbgc
 RUN pip install deepbgc[hmm]
 # RUN deepbgc download
 
