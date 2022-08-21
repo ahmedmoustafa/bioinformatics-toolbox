@@ -300,16 +300,17 @@ mv $SETUPDIR/salmon-latest_linux_x86_64/lib/* /usr/local/lib/
 
 # kallisto
 ##########
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/pachterlab/kallisto.git && \
-cd $SETUPDIR/kallisto/ext/htslib && \
-autoheader && autoconf && \
-make -j CFLAGS=-D_GNU_SOURCE lib-static && \
-cd $SETUPDIR/kallisto/ && \
-mkdir build && \
-cd $SETUPDIR/kallisto/build && \
-cmake .. && make && make install && \
-R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
+# RUN cd $SETUPDIR/ && \
+# git clone https://github.com/pachterlab/kallisto.git && \
+# cd $SETUPDIR/kallisto/ext/htslib && \
+# autoheader && autoconf && \
+# make -j CFLAGS=-D_GNU_SOURCE lib-static && \
+# cd $SETUPDIR/kallisto/ && \
+# mkdir build && \
+# cd $SETUPDIR/kallisto/build && \
+# cmake .. && make && make install && \
+# R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
+RUN apt-get install kallisto
 
 # BBMap
 #######
