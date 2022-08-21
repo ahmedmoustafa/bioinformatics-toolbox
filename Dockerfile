@@ -47,7 +47,7 @@ libbison-dev \
 libgmp3-dev \
 libncurses5-dev libncursesw5-dev \
 liblzma-dev \
-caffe-cpu \
+# caffe-cpu \
 cargo \
 ffmpeg \
 libmagick++-dev \
