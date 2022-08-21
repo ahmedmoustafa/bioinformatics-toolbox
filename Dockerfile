@@ -446,7 +446,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release && make -j4 && make simple_test  && make ins
 # MetaVelvet
 ############
 RUN cd $SETUPDIR/ && \
-git clone git://github.com/hacchy/MetaVelvet.git && \
+git clone https://github.com/hacchy/MetaVelvet.git && \
 cd $SETUPDIR/MetaVelvet && \
 make && mv meta-velvetg /usr/local/bin/
 
