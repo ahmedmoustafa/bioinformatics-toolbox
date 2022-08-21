@@ -304,8 +304,8 @@ RUN cd $SETUPDIR/ && \
 git clone https://github.com/pachterlab/kallisto.git && \
 cd $SETUPDIR/kallisto/ext/htslib && \
 autoheader && autoconf && \
+make -j CFLAGS=-D_GNU_SOURCE lib-static && \
 cd $SETUPDIR/kallisto/ && \
-gmake -j CFLAGS=-D_GNU_SOURCE lib-static && \
 mkdir build && \
 cd $SETUPDIR/kallisto/build && \
 cmake .. && make && make install && \
