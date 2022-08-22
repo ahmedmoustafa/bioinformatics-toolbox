@@ -625,7 +625,7 @@ apt-get -y install cpanminus libtry-tiny-perl libperl4-corelibs-perl && \
 cpanm autodie && \
 cpanm Module::Build && \
 cpanm Bio::DB::HTS::Tabix && \
-git clone https://github.com/Ensembl/ensembl-vep.git
+git clone https://github.com/Ensembl/ensembl-vep.git && \
 cd ensembl-vep && \
 perl INSTALL.pl --NO_HTSLIB --AUTO alcfp
 # perl INSTALL.pl --NO_HTSLIB --AUTO alcfp --SPECIES homo_sapiens --ASSEMBLY GRCh38 --PLUGINS all
