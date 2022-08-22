@@ -627,7 +627,7 @@ cpanm Module::Build && \
 cpanm Bio::DB::HTS::Tabix && \
 git clone https://github.com/Ensembl/ensembl-vep.git && \
 cd ensembl-vep && \
-perl INSTALL.pl --NO_HTSLIB --AUTO alcfp --SPECIES homo_sapiens --ASSEMBLY GRCh38 --PLUGINS all
+# perl INSTALL.pl --NO_HTSLIB --AUTO alcfp --SPECIES homo_sapiens --ASSEMBLY GRCh38 --PLUGINS all
 
 
 ##########################################################################################
@@ -637,7 +637,7 @@ perl INSTALL.pl --NO_HTSLIB --AUTO alcfp --SPECIES homo_sapiens --ASSEMBLY GRCh3
 ###########
 ###########
 # Removing /usr/local/lib/libgomp.so.1 (seems to be broken) and use /usr/lib/x86_64-linux-gnu/libgomp.so.1 instead
-RUN rm -fr /usr/local/lib/libgomp.so.1
+# RUN rm -fr /usr/local/lib/libgomp.so.1
 
 RUN cd $SETUPDIR/
 RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
