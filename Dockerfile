@@ -711,7 +711,7 @@ deepbgc info ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version ; \
-/apps/ensembl-vep/vep
+# /apps/ensembl-vep/vep
 
 ##########################################################################################
 ##########################################################################################
