@@ -685,8 +685,6 @@ salmon --version ; \
 bbmap.sh --version ; \
 hts_Stats --version ; \
 treetime --version ; \
-# RUN FastTree
-# RUN phyml --version
 raxmlHPC -v ; \
 raxml-ng --version ; \
 pplacer --version ; \
@@ -710,8 +708,7 @@ deepbgc info ; \
 /apps/IGV/igv.sh --version ; \
 docker --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
-nextflow -version ; \
-# /apps/ensembl-vep/vep
+nextflow -version 
 
 ##########################################################################################
 ##########################################################################################
