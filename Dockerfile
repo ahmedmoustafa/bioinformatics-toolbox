@@ -577,9 +577,9 @@ pip install ./antismash-6.1.1
 # Docker
 ########
 
-RUN cd $SETUPDIR/ && \
-wget -t 0 https://get.docker.com/ -O docker.sh && \
-sh docker.sh
+# RUN cd $SETUPDIR/ && \
+# wget -t 0 https://get.docker.com/ -O docker.sh && \
+# sh docker.sh
 
 # Miniconda
 ###########
