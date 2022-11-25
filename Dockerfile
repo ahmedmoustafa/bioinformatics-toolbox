@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:22.04.1
 
 LABEL description="Bioinformatics Docker Container"
 LABEL maintainer="amoustafa@aucegypt.edu"
