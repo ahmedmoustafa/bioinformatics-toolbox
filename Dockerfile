@@ -604,9 +604,9 @@ mv nextflow /usr/local/bin/
 # GATK
 ######
 # Removing default openjdk because of GATK's requirement for an old version of Java.
-RUN apt-get -y purge openjdk*
+# RUN apt-get -y purge openjdk*
 # Installing openjdk 8
-RUN apt-get -y install openjdk-8* ant
+# RUN apt-get -y install openjdk-8* ant
 RUN mkdir -p /apps/ && \
 cd /apps/ && \
 git clone https://github.com/broadinstitute/gatk.git && \
