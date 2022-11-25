@@ -35,7 +35,7 @@ sudo docker run -it bioinformatics-toolbox
 ```
 
 ### Notes
-- The size of the image is about **60 GB**.
+- The image is about **60 GB**.
 - Building the image (option #2) from the [`Dockerfile`](https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/main/Dockerfile) takes about **six hours** on a Google Cloud machine type [e2-medium](https://cloud.google.com/compute/docs/machine-types) in zone [us-west2-a](https://cloud.google.com/compute/docs/regions-zones).
 
 ## Citation
