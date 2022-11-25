@@ -51,7 +51,6 @@
 | [antiSMASH](https://antismash.secondarymetabolites.org/) | [antiSMASH: Rapid identification, annotation and analysis of secondary metabolite biosynthesis gene clusters](https://pubmed.ncbi.nlm.nih.gov/21672958/) |
 | [DeepBGC](https://github.com/Merck/deepbgc) | [A deep learning genome-mining strategy for biosynthetic gene cluster prediction](https://www.ncbi.nlm.nih.gov/pubmed/31400112) |
 | [GECCO](https://gecco.embl.de/) | [Accurate de novo identification of biosynthetic gene clusters with GECCO](https://doi.org/10.1101/2021.05.03.442509) |
-| [Docker](https://www.docker.com/) | |
 | [Miniconda](https://docs.conda.io/en/latest/) | |
 | [CD-HIT](https://github.com/weizhongli/cdhit) | [Cd-hit: a fast program for clustering and comparing large sets of protein or nucleotide sequences](https://www.ncbi.nlm.nih.gov/pubmed/16731699) |
 | [Nextflow](https://www.nextflow.io/) | [Nextflow enables reproducible computational workflows](https://pubmed.ncbi.nlm.nih.gov/28398311/) |
