@@ -584,7 +584,7 @@ pip install ./antismash-6.1.1
 
 # Source https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
 
-RUN apt-get remove docker docker-engine docker.io && \
+RUN apt-get remove docker docker.io && \
 apt-get update && \
 apt-get install -y docker.io && \
 snap install docker
