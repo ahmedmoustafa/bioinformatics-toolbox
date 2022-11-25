@@ -11,7 +11,6 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 RUN apt-get update --fix-missing && \
 apt-get -y upgrade && \
 apt-get -y install apt-utils dialog software-properties-common
-
 RUN add-apt-repository universe && \
 add-apt-repository multiverse && \
 add-apt-repository restricted
@@ -578,10 +577,9 @@ pip install ./antismash-6.1.1
 # Docker
 ########
 
-# RUN cd $SETUPDIR/ && \
-# wget -t 0 https://get.docker.com/ -O docker.sh && \
-# sh docker.sh
-
+RUN cd $SETUPDIR/ && \
+wget -t 0 https://get.docker.com/ -O docker.sh && \
+sh docker.sh
 
 # Miniconda
 ###########
@@ -710,6 +708,7 @@ gecco --version ; \
 deepbgc info ; \
 /apps/gatk/gatk --list ; \
 /apps/IGV/igv.sh --version ; \
+docker info ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version 
 
