@@ -708,7 +708,6 @@ gecco --version ; \
 deepbgc info ; \
 /apps/gatk/gatk --list ; \
 /apps/IGV/igv.sh --version ; \
-docker info ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version 
 
