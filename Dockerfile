@@ -8,13 +8,13 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 ##########################################################################################
 ##########################################################################################
 
-RUN apt-get-get update --fix-missing && \
-apt-get-get -y upgrade && \
-apt-get-get -y install apt-get-utils dialog software-properties-common
+RUN apt-get update --fix-missing && \
+apt-get -y upgrade && \
+apt-get -y install apt-utils dialog software-properties-common
 
-RUN add-apt-get-repository universe && \
-add-apt-get-repository multiverse && \
-add-apt-get-repository restricted
+RUN add-apt-repository universe && \
+add-apt-repository multiverse && \
+add-apt-repository restricted
 
 ##########################################################################################
 ##########################################################################################
@@ -30,7 +30,7 @@ WORKDIR $SETUPDIR
 ###############
 ###############
 
-RUN apt-get-get -y install vim nano emacs rsync curl wget screen htop parallel gnupg lsof git locate unrar bc aptitude unzip bison flex \
+RUN apt-get -y install vim nano emacs rsync curl wget screen htop parallel gnupg lsof git locate unrar bc aptitude unzip bison flex \
 build-essential libtool autotools-dev automake autoconf cmake \
 libboost-dev libboost-all-dev libboost-system-dev libboost-program-options-dev libboost-iostreams-dev libboost-filesystem-dev \
 gfortran libgfortran5 \
@@ -64,7 +64,7 @@ git-lfs
 
 # BioPerl
 #########
-RUN apt-get-get -y install bioperl
+RUN apt-get -y install bioperl
 
 # Biopython
 ###########
@@ -72,21 +72,21 @@ RUN pip3 install --no-cache-dir -U biopython numpy pandas matplotlib scipy seabo
 
 # R
 ###
-# RUN apt-get-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
-# add-apt-get-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' && \
+# RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
+# add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' && \
 
 # update indices
 RUN apt-get update -qq && \
 # install two helper packages we need
 apt-get install --no-install-recommends software-properties-common dirmngr && \
 # add the signing key (by Michael Rutter) for these repos
-# To verify key, run gpg --show-keys /etc/apt-get/trusted.gpg.d/cran_ubuntu_key.asc 
+# To verify key, run gpg --show-keys /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc 
 # Fingerprint: E298A3A825C0D65DFD57CBB651716619E084DAB9
-wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt-get/trusted.gpg.d/cran_ubuntu_key.asc && \
+wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc && \
 # add the R 4.0 repo from CRAN -- adjust 'focal' to 'groovy' or 'bionic' as needed
-add-apt-get-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" \
-apt-get-get update && \
-apt-get-get -y install --no-install-recommends r-base r-base-dev && \
+add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" \
+apt-get update && \
+apt-get -y install --no-install-recommends r-base r-base-dev && \
 R -e "install.packages (c('tidyverse', 'tidylog', 'readr', 'dplyr', 'knitr', 'printr', 'rmarkdown', 'shiny', \
 'ggplot2', 'gplots', 'plotly', 'rbokeh', 'circlize', 'RColorBrewer', 'formattable', \
 'reshape2', 'data.table', 'readxl', 'devtools', 'cowplot', 'tictoc', 'ggpubr', 'patchwork', 'reticulate', \
@@ -211,7 +211,7 @@ mv parallel-fastq-dump /usr/local/bin/
 
 # BLAST & HMMER
 ###############
-RUN apt-get-get -y install ncbi-blast+ hmmer
+RUN apt-get -y install ncbi-blast+ hmmer
 RUN cd $SETUPDIR/ && wget -t 0 http://github.com/bbuchfink/diamond/releases/download/v2.0.9/diamond-linux64.tar.gz && tar zxvf diamond-linux64.tar.gz && mv diamond /usr/local/bin/
 
 # CD-HIT
@@ -231,7 +231,7 @@ make install
 
 # JAligner
 ##########
-RUN apt-get-get -y install jaligner
+RUN apt-get -y install jaligner
 
 # MUSCLE
 ########
@@ -310,7 +310,7 @@ mv $SETUPDIR/salmon-latest_linux_x86_64/lib/* /usr/local/lib/
 # cd $SETUPDIR/kallisto/build && \
 # cmake .. && make && make install && \
 # R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
-RUN apt-get-get install kallisto && \
+RUN apt-get install kallisto && \
 R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
 
 
@@ -543,10 +543,10 @@ RUN pip install gecco-tool
 
 # DeepBGC
 #########
-RUN apt-get-get update && \
-apt-get-get -y install software-properties-common && \
-add-apt-get-repository ppa:deadsnakes/ppa && \
-apt-get-get install -y python3-distutils python3-apt-get
+RUN apt-get update && \
+apt-get -y install software-properties-common && \
+add-apt-repository ppa:deadsnakes/ppa && \
+apt-get install -y python3-distutils python3-apt
 RUN pip install kiwisolver --force
 RUN pip install deepbgc
 RUN pip install deepbgc[hmm]
@@ -554,12 +554,12 @@ RUN pip install deepbgc[hmm]
 
 # antiSMASH
 ###########
-RUN apt-get-get update && \
-apt-get-get -y install apt-get-transport-https
-RUN wget http://dl.secondarymetabolites.org/antismash-stretch.list -O /etc/apt-get/sources.list.d/antismash.list && \
-wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | apt-get-key add -
-RUN apt-get-get update && \
-apt-get-get -y install hmmer2 hmmer diamond-aligner fasttree prodigal ncbi-blast+ muscle glimmerhmm
+RUN apt-get update && \
+apt-get -y install apt-transport-https
+RUN wget http://dl.secondarymetabolites.org/antismash-stretch.list -O /etc/apt/sources.list.d/antismash.list && \
+wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | apt-key add -
+RUN apt-get update && \
+apt-get -y install hmmer2 hmmer diamond-aligner fasttree prodigal ncbi-blast+ muscle glimmerhmm
 
 RUN cd $SETUPDIR/ && \
 wget https://dl.secondarymetabolites.org/releases/6.0.0/antismash-6.0.0.tar.gz && tar -zxf antismash-6.0.0.tar.gz && \
@@ -602,9 +602,9 @@ mv nextflow /usr/local/bin/
 # GATK
 ######
 # Removing default openjdk because of GATK's requirement for an old version of Java.
-RUN apt-get-get -y purge openjdk*
+RUN apt-get -y purge openjdk*
 # Installing openjdk 8
-RUN apt-get-get -y install openjdk-8* ant
+RUN apt-get -y install openjdk-8* ant
 RUN mkdir -p /apps/ && \
 cd /apps/ && \
 git clone https://github.com/broadinstitute/gatk.git && \
@@ -621,7 +621,7 @@ mv IGV_Linux_snapshot IGV
 # VEP
 #####
 # RUN cd /apps/ && \
-# apt-get-get -y install cpanminus libtry-tiny-perl libperl4-corelibs-perl && \
+# apt-get -y install cpanminus libtry-tiny-perl libperl4-corelibs-perl && \
 # cpanm autodie && \
 # cpanm Module::Build && \
 # cpanm Bio::DB::HTS::Tabix && \
