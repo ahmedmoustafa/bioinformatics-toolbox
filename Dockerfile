@@ -393,8 +393,8 @@ make ; make install ; mv ./bin/* /usr/local/bin/
 ##########
 RUN cd $SETUPDIR/ && \
 wget -t 0 https://github.com/biod/sambamba/releases/download/v0.8.2/sambamba-0.8.2-linux-amd64-static.gz && \
-gzip -d sambamba-0.8.0-linux-amd64-static.gz && \
-mv sambamba-0.8.0-linux-amd64-static /usr/local/bin/sambamba && \
+gzip -d sambamba-0.8.2-linux-amd64-static.gz && \
+mv sambamba-0.8.2-linux-amd64-static /usr/local/bin/sambamba && \
 chmod +x /usr/local/bin/sambamba
 
 
