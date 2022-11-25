@@ -496,7 +496,7 @@ mkdir build && \
 cd $SETUPDIR/raxml-ng/build && \
 cmake .. && make && mv ../bin/raxml-ng /usr/local/bin/  && \
 cmake -DSTATIC_BUILD=ON -DENABLE_RAXML_SIMD=OFF -DENABLE_PLLMOD_SIMD=OFF .. && make && mv ../bin/raxml-ng-static /usr/local/bin/  && \
-cmake -DUSE_MPI=ON .. && make && mv ../bin/raxml-ng /usr/local/bin/raxml-ng-mpi
+cmake -DUSE_MPI=ON .. && make && mv ../bin/raxml-ng-mpi /usr/local/bin/
 
 
 # PhyML
