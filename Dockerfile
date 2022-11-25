@@ -408,7 +408,7 @@ chmod +x /usr/local/bin/sambamba
 # SPAdes
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 http://cab.spbu.ru/files/release3.15.2/SPAdes-3.15.5-Linux.tar.gz  && \
+wget -t 0 http://cab.spbu.ru/files/release3.15.5/SPAdes-3.15.5-Linux.tar.gz  && \
 tar zxvf SPAdes-3.15.5-Linux.tar.gz  && \
 mv SPAdes-3.15.5-Linux/bin/* /usr/local/bin/  && \
 mv SPAdes-3.15.5-Linux/share/* /usr/local/share/
