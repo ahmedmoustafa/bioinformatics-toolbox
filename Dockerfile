@@ -578,7 +578,9 @@ pip install ./antismash-6.1.1
 # Docker
 ########
 
-RUN apt-key list 
+RUN apt-key list
+RUN apt-key del rsa4096
+RUN apt-key list
 
 RUN cd $SETUPDIR/ && \
 wget -t 0 https://get.docker.com/ -O docker.sh && \
