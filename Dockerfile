@@ -582,13 +582,6 @@ pip install ./antismash-6.1.1
 # wget -t 0 https://get.docker.com/ -O docker.sh && \
 # sh docker.sh
 
-# Source https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
-
-RUN apt-get remove docker docker.io && \
-apt-get update && \
-apt-get install -y docker.io && \
-snap install docker
-
 
 # Miniconda
 ###########
@@ -717,7 +710,6 @@ gecco --version ; \
 deepbgc info ; \
 /apps/gatk/gatk --list ; \
 /apps/IGV/igv.sh --version ; \
-docker info ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version 
 
