@@ -156,7 +156,7 @@ make && make install INSTALL="/usr/local/"
 # SeqKit
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/shenwei356/seqkit/releases/download/v0.16.1/seqkit_linux_amd64.tar.gz && \
+wget -t 0 https://github.com/shenwei356/seqkit/releases/download/v2.3.1/seqkit_linux_amd64.tar.gz && \
 tar zxvf seqkit_linux_amd64.tar.gz && \
 mv seqkit /usr/local/bin/
 
@@ -214,7 +214,8 @@ mv parallel-fastq-dump /usr/local/bin/
 # BLAST & HMMER
 ###############
 RUN apt-get -y install ncbi-blast+ hmmer
-RUN cd $SETUPDIR/ && wget -t 0 http://github.com/bbuchfink/diamond/releases/download/v2.0.9/diamond-linux64.tar.gz && tar zxvf diamond-linux64.tar.gz && mv diamond /usr/local/bin/
+RUN cd $SETUPDIR/ && wget -t 0 https://github.com/bbuchfink/diamond/releases/download/v2.0.15/diamond-linux64.tar.gz && tar zxvf diamond-linux64.tar.gz && mv diamond /usr/local/bin/
+
 
 # CD-HIT
 ########
@@ -246,11 +247,11 @@ make && mv muscle /usr/local/bin/
 # MAFFT
 #######
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://mafft.cbrc.jp/alignment/software/mafft-7.481-with-extensions-src.tgz && \
-tar zxvf mafft-7.481-with-extensions-src.tgz && \
-cd $SETUPDIR/mafft-7.481-with-extensions/core && \
+wget -t 0 https://mafft.cbrc.jp/alignment/software/mafft-7.505-with-extensions-src.tgz && \
+tar zxvf mafft-7.505-with-extensions-src.tgz && \
+cd $SETUPDIR/mafft-7.505-with-extensions/core && \
 make clean && make && make install && \
-cd $SETUPDIR/mafft-7.481-with-extensions/extensions/ && \
+cd $SETUPDIR/mafft-7.505-with-extensions/extensions/ && \
 make clean && make && make install
 
 # BWA
@@ -295,8 +296,8 @@ make STAR && mv STAR /usr/local/bin/
 # Salmon
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/COMBINE-lab/salmon/releases/download/v1.4.0/salmon-1.4.0_linux_x86_64.tar.gz && \
-tar zxvf salmon-1.4.0_linux_x86_64.tar.gz && \
+wget -t 0 https://github.com/COMBINE-lab/salmon/releases/download/v1.9.0/salmon-1.9.0_linux_x86_64.tar.gz && \
+tar zxvf salmon-1.9.0_linux_x86_64.tar.gz && \
 mv $SETUPDIR/salmon-latest_linux_x86_64/bin/* /usr/local/bin/ && \
 mv $SETUPDIR/salmon-latest_linux_x86_64/lib/* /usr/local/lib/
 
@@ -319,8 +320,8 @@ R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
 # BBMap
 #######
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://downloads.sourceforge.net/project/bbmap/BBMap_38.90.tar.gz && \
-tar zxvf BBMap_38.90.tar.gz && \
+wget -t 0 https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz && \
+tar zxvf BBMap_39.01.tar.gz && \
 mv bbmap/* /usr/local/bin/
 
 ##########################################################################################
@@ -392,7 +393,7 @@ make ; make install ; mv ./bin/* /usr/local/bin/
 # SAMBAMBA
 ##########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/biod/sambamba/releases/download/v0.8.0/sambamba-0.8.0-linux-amd64-static.gz && \
+wget -t 0 https://github.com/biod/sambamba/releases/download/v0.8.2/sambamba-0.8.2-linux-amd64-static.gz && \
 gzip -d sambamba-0.8.0-linux-amd64-static.gz && \
 mv sambamba-0.8.0-linux-amd64-static /usr/local/bin/sambamba && \
 chmod +x /usr/local/bin/sambamba
@@ -646,7 +647,7 @@ RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
 RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
 RUN echo "echo '*********************************'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.3)'" >> $SETUPDIR/init.sh
+RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.2)'" >> $SETUPDIR/init.sh
 RUN echo "echo '*********************************'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
@@ -657,7 +658,7 @@ RUN echo "echo 'If you would like to request adding certain tools or report a pr
 RUN echo "echo 'please submit an issue https://github.com/ahmedmoustafa/bioinformatics-toolbox/issues'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
 RUN echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh
-RUN echo "echo '10.5281/zenodo.5069735'"  >> $SETUPDIR/init.sh
+RUN echo "echo '10.5281/zenodo.7360870'"  >> $SETUPDIR/init.sh
 RUN echo "echo 'Have fun!'" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
