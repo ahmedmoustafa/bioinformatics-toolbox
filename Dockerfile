@@ -589,8 +589,7 @@ apt-get install apt-transport-https ca-certificates curl software-properties-com
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" && \
 apt-cache policy docker-ce && \
-apt-get install docker-ce && \
-systemctl status docker
+apt-get install docker-ce
 
 
 # Miniconda
@@ -720,7 +719,7 @@ gecco --version ; \
 deepbgc info ; \
 /apps/gatk/gatk --list ; \
 /apps/IGV/igv.sh --version ; \
-docker --version ; \
+docker info ; \
 /usr/local/miniconda3/bin/conda --version ; \
 nextflow -version 
 
