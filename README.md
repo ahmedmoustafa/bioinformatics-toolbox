@@ -36,8 +36,8 @@ sudo docker run -it bioinformatics-toolbox
 
 ### Notes
 - The size of the image is about **43 GB**.
-- Pulling the image (option #1) takes about **50 minutes** on a Google Cloud machine type [**e2-medium**](https://cloud.google.com/compute/docs/machine-types) in zone [**us-west2-a**](https://cloud.google.com/compute/docs/regions-zones).
-- Building the image (option #2) takes about **3.5 hours** on a Google Cloud machine type [**e2-standard-2**](https://cloud.google.com/compute/docs/general-purpose-machines#e2_machine_types) in zone [**us-central1-a**](https://cloud.google.com/compute/docs/regions-zones).
+- Pulling the image (option #1) takes about **50 minutes** on a Google Cloud machine type [**e2-standard-2**](https://cloud.google.com/compute/docs/general-purpose-machines#e2_machine_types) in zone [**us-central1-a**](https://cloud.google.com/compute/docs/regions-zones).
+- Building the image (option #2) takes about **210 minutes** on a Google Cloud machine type [**e2-standard-2**](https://cloud.google.com/compute/docs/general-purpose-machines#e2_machine_types) in zone [**us-central1-a**](https://cloud.google.com/compute/docs/regions-zones).
 
 ## Citation
 
