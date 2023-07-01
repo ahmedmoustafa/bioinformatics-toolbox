@@ -33,7 +33,7 @@ RUN apt-get -y install vim nano emacs rsync curl wget screen htop parallel gnupg
 build-essential libtool autotools-dev automake autoconf cmake \
 libboost-dev libboost-all-dev libboost-system-dev libboost-program-options-dev libboost-iostreams-dev libboost-filesystem-dev \
 gfortran libgfortran5 \
-default-jre default-jdk ant \
+openjdk-17* ant \
 python3 python3-dev python3-pip python3-venv \
 libssl-dev libcurl4-openssl-dev \
 libxml2-dev \
@@ -52,7 +52,10 @@ ffmpeg \
 libmagick++-dev \
 libavfilter-dev \
 dos2unix \
-git-lfs
+git-lfs \
+apt-transport-https \
+autopoint po4a doxygen \
+libreadline-dev
 
 ##########################################################################################
 ##########################################################################################
@@ -71,28 +74,18 @@ RUN pip3 install --no-cache-dir -U biopython numpy pandas matplotlib scipy seabo
 
 # R
 ###
-# RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
-# add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' && \
-
-# update indices
-RUN apt-get update -qq && \
-# install two helper packages we need
-apt-get install --no-install-recommends software-properties-common dirmngr && \
-# add the signing key (by Michael Rutter) for these repos
-# To verify key, run gpg --show-keys /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc 
-# Fingerprint: E298A3A825C0D65DFD57CBB651716619E084DAB9
+RUN apt-get update -qq && apt-get install --no-install-recommends software-properties-common dirmngr && \
 wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc && \
-# add the R 4.0 repo from CRAN -- adjust 'focal' to 'groovy' or 'bionic' as needed
 add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 
-RUN apt-get update && \
-apt-get -y install --no-install-recommends r-base r-base-dev && \
-R -e "install.packages (c('tidyverse', 'tidylog', 'readr', 'dplyr', 'knitr', 'printr', 'rmarkdown', 'shiny', \
+RUN apt-get -y install --no-install-recommends r-base r-base-dev
+
+RUN R -e "install.packages (c('remotes, tidyverse', 'tidylog', 'readr', 'dplyr', 'knitr', 'printr', 'rmarkdown', 'shiny', \
 'ggplot2', 'gplots', 'plotly', 'rbokeh', 'circlize', 'RColorBrewer', 'formattable', \
 'reshape2', 'data.table', 'readxl', 'devtools', 'cowplot', 'tictoc', 'ggpubr', 'patchwork', 'reticulate', \
 'rpart', 'rpart.plot', 'randomForest', 'randomForestExplainer', 'randomForestSRC', 'ggRandomForests', 'xgboost', 'gbm', 'iml', \
 'gganimate', 'gifski', 'av', 'magick', 'ggvis', 'googleVis', \
-'pheatmap', 'Rtsne', 'vsn', 'vegan', 'BiocManager'))"
+'pheatmap', 'Rtsne', 'vsn', 'vegan', 'BiocManager'), ask = FALSE)"
 
 RUN R -e "BiocManager::install(c('DESeq2', 'edgeR', 'dada2', 'phyloseq', 'metagenomeSeq', 'biomaRt'), ask = FALSE, update = TRUE)"
 
@@ -155,7 +148,7 @@ make && make install INSTALL="/usr/local/"
 # SeqKit
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/shenwei356/seqkit/releases/download/v2.3.1/seqkit_linux_amd64.tar.gz && \
+wget -t 0 https://github.com/shenwei356/seqkit/releases/download/v2.4.0/seqkit_linux_amd64.tar.gz && \
 tar zxvf seqkit_linux_amd64.tar.gz && \
 mv seqkit /usr/local/bin/
 
@@ -212,17 +205,28 @@ mv parallel-fastq-dump /usr/local/bin/
 
 # BLAST & HMMER
 ###############
-RUN apt-get -y install ncbi-blast+ hmmer
-RUN cd $SETUPDIR/ && wget -t 0 https://github.com/bbuchfink/diamond/releases/download/v2.0.15/diamond-linux64.tar.gz && tar zxvf diamond-linux64.tar.gz && mv diamond /usr/local/bin/
+RUN apt-get -y install ncbi-blast+ hmmer hmmer2
 
+# Diamond
+#########
+RUN cd $SETUPDIR/ && \
+wget -t 0 https://github.com/bbuchfink/diamond/releases/download/v2.1.8/diamond-linux64.tar.gz && \
+tar zxvf diamond-linux64.tar.gz && \
+mv diamond /usr/local/bin/
 
 # CD-HIT
 ########
 RUN cd $SETUPDIR/ && \
 git clone https://github.com/weizhongli/cdhit.git && \
 cd $SETUPDIR/cdhit && \
-make && \
-make install
+make && make install
+
+# vsearch
+#########
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/torognes/vsearch.git && \
+cd $SETUPDIR/vsearch/ && \
+./autogen.sh && ./configure && make && make install
 
 ##########################################################################################
 ##########################################################################################
@@ -238,10 +242,10 @@ RUN apt-get -y install jaligner
 # MUSCLE
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://www.drive5.com/muscle/downloads3.8.31/muscle3.8.31_src.tar.gz && \
-tar zxvf muscle3.8.31_src.tar.gz && \
-cd $SETUPDIR/muscle3.8.31/src && \
-make && mv muscle /usr/local/bin/
+wget -t 0 https://github.com/rcedgar/muscle/archive/refs/tags/5.1.0.tar.gz && \
+tar xvf 5.1.0.tar.gz && \
+cd $SETUPDIR/muscle-5.1.0/src && \
+make && mv Linux/muscle /usr/local/bin/
 
 # MAFFT
 #######
@@ -275,6 +279,13 @@ git clone https://github.com/infphilo/hisat2.git && \
 cd $SETUPDIR/hisat2 && \
 make && mv hisat2-* /usr/local/bin/  &&  mv hisat2 /usr/local/bin/
 
+# HISAT-3N
+##########
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/DaehwanKimLab/hisat2.git hisat-3n && \
+cd hisat-3n && \
+git checkout -b hisat-3n origin/hisat-3n && \
+make && mv hisat-3n* /usr/local/bin/
 
 # Bowtie2
 ########
@@ -283,7 +294,6 @@ git clone https://github.com/BenLangmead/bowtie2.git && \
 cd $SETUPDIR/bowtie2/ && \
 make && make install
 
-
 # STAR
 ######
 RUN cd $SETUPDIR/ && \
@@ -291,28 +301,26 @@ git clone https://github.com/alexdobin/STAR.git && \
 cd $SETUPDIR/STAR/source && \
 make STAR && mv STAR /usr/local/bin/
 
-
 # Salmon
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/COMBINE-lab/salmon/releases/download/v1.9.0/salmon-1.9.0_linux_x86_64.tar.gz && \
-tar zxvf salmon-1.9.0_linux_x86_64.tar.gz && \
-mv $SETUPDIR/salmon-1.9.0_linux_x86_64/bin/* /usr/local/bin/ && \
-mv $SETUPDIR/salmon-1.9.0_linux_x86_64/lib/* /usr/local/lib/
+wget -t 0 https://github.com/COMBINE-lab/salmon/releases/download/v1.10.0/salmon-1.10.0_linux_x86_64.tar.gz && \
+tar zxvf salmon-1.10.0_linux_x86_64.tar.gz && \
+mv $SETUPDIR/salmon-latest_linux_x86_64/bin/* /usr/local/bin/ && \
+mv $SETUPDIR/salmon-latest_linux_x86_64/lib/* /usr/local/lib/
 
 # kallisto
 ##########
-#RUN cd $SETUPDIR/ && \
-#git clone https://github.com/pachterlab/kallisto.git && \
-#cd $SETUPDIR/kallisto/ext/htslib && \
-#autoheader && autoconf && \
-#make -j CFLAGS=-D_GNU_SOURCE lib-static && \
-#cd $SETUPDIR/kallisto/ && \
-#mkdir build && \
-#cd $SETUPDIR/kallisto/build && \
-#cmake .. && make && make install
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/pachterlab/kallisto.git && \
+cd $SETUPDIR/kallisto/ext/htslib && \
+autoheader && autoconf && \
+make -j CFLAGS=-D_GNU_SOURCE lib-static && \
+cd $SETUPDIR/kallisto/ && \
+mkdir build && \
+cd $SETUPDIR/kallisto/build && \
+cmake .. && make && make install
 
-RUN apt-get install kallisto 
 RUN R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
 
 # BBMap
@@ -349,7 +357,6 @@ RUN cd $SETUPDIR/ && \
 git clone https://github.com/samtools/bcftools.git && \
 cd $SETUPDIR/bcftools && \
 autoheader ; autoconf ; ./configure ; make ; make install
-
 
 # Bamtools
 ##########
@@ -396,7 +403,6 @@ gzip -d sambamba-0.8.2-linux-amd64-static.gz && \
 mv sambamba-0.8.2-linux-amd64-static /usr/local/bin/sambamba && \
 chmod +x /usr/local/bin/sambamba
 
-
 ##########################################################################################
 ##########################################################################################
 
@@ -412,18 +418,24 @@ tar zxvf SPAdes-3.15.5-Linux.tar.gz  && \
 mv SPAdes-3.15.5-Linux/bin/* /usr/local/bin/  && \
 mv SPAdes-3.15.5-Linux/share/* /usr/local/share/
 
-
 # ABySS
 #######
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/sparsehash/sparsehash.git && \
-cd $SETUPDIR/sparsehash && \
-./autogen.sh && ./configure && make && make install && \
-cd $SETUPDIR/ && \
-git clone https://github.com/bcgsc/abyss.git && \
-cd $SETUPDIR/abyss && \
-./autogen.sh && ./configure && make && make install
+# RUN cd $SETUPDIR/ && \
+# git clone https://github.com/sparsehash/sparsehash.git && \
+# cd $SETUPDIR/sparsehash && \
+# ./autogen.sh && ./configure && make && make install
 
+# RUN cd $SETUPDIR/ && \
+# git clone https://github.com/bcgsc/btllib.git && \
+# btllib/compile && \
+# mv $SETUPDIR/btllib/install/bin/ /usr/local/bin/ && \
+# mv $SETUPDIR/btllib/install/include/ /usr/local/include/ && \
+# mv $SETUPDIR/btllib/install/lib/ /usr/local/lib/
+
+# RUN cd $SETUPDIR/ && \
+# git clone https://github.com/bcgsc/abyss.git && \
+# cd $SETUPDIR/abyss && \
+# ./autogen.sh && ./configure && make && make install
 
 # Velvet
 ########
@@ -431,7 +443,6 @@ RUN cd $SETUPDIR/ && \
 git clone https://github.com/dzerbino/velvet.git && \
 cd $SETUPDIR/velvet/ && \
 make && mv velvet* /usr/local/bin/
-
 
 # MEGAHIT
 #########
@@ -442,7 +453,6 @@ git submodule update --init && \
 mkdir build && \
 cd $SETUPDIR/megahit/build && \
 cmake .. -DCMAKE_BUILD_TYPE=Release && make -j4 && make simple_test  && make install
-
 
 # MetaVelvet
 ############
@@ -462,7 +472,6 @@ make && mv meta-velvetg /usr/local/bin/
 ##########
 RUN pip3 install phylo-treetime
 
-
 # FastTree
 ##########
 RUN cd $SETUPDIR/ && \
@@ -471,7 +480,6 @@ gcc -O3 -finline-functions -funroll-loops -Wall -o FastTree FastTree.c -lm && \
 gcc -DOPENMP -fopenmp -O3 -finline-functions -funroll-loops -Wall -o FastTreeMP FastTree.c -lm && \
 mv FastTree /usr/local/bin && \
 mv FastTreeMP /usr/local/bin
-
 
 # RAxML
 #######
@@ -485,7 +493,6 @@ rm -fr *.o && make -f Makefile.SSE3.PTHREADS.gcc && cp raxmlHPC-PTHREADS-SSE3 /u
 rm -fr *.o && make -f Makefile.MPI.gcc && cp raxmlHPC-MPI /usr/local/bin/  && \
 rm -fr *.o && make -f Makefile.SSE3.MPI.gcc && cp raxmlHPC-MPI-SSE3 /usr/local/bin/
 
-
 # RAxML NG
 ##########
 RUN cd $SETUPDIR/ && \
@@ -497,14 +504,12 @@ cmake .. && make && mv ../bin/raxml-ng /usr/local/bin/  && \
 cmake -DSTATIC_BUILD=ON -DENABLE_RAXML_SIMD=OFF -DENABLE_PLLMOD_SIMD=OFF .. && make && mv ../bin/raxml-ng-static /usr/local/bin/  && \
 cmake -DUSE_MPI=ON .. && make && mv ../bin/raxml-ng-mpi /usr/local/bin/
 
-
 # PhyML
 #######
 RUN cd $SETUPDIR/ && \
 git clone https://github.com/stephaneguindon/phyml.git && \
 cd $SETUPDIR/phyml/ && \
 sh ./autogen.sh && ./configure && make && make install
-
 
 # Pplacer
 #########
@@ -529,6 +534,14 @@ RUN cd $SETUPDIR/ && \
 wget -t 0 https://github.com/hyattpd/Prodigal/releases/download/v2.6.3/prodigal.linux && \
 mv prodigal.linux /usr/local/bin/prodigal && \
 chmod +x /usr/local/bin/prodigal
+
+# GlimmerHMM
+############
+RUN cd $SETUPDIR/ && \
+wget -t 0 http://ccb.jhu.edu/software/glimmerhmm/dl/GlimmerHMM-3.0.4.tar.gz && \
+tar zxvf GlimmerHMM-3.0.4.tar.gz && \
+mv $SETUPDIR/GlimmerHMM/bin/glimmerhmm_linux_x86_64 /usr/local/bin/glimmerhmm && \
+chmod +x /usr/local/bin/glimmerhmm
 
 # Infernal
 ##########
@@ -555,16 +568,12 @@ RUN pip install deepbgc[hmm]
 
 # antiSMASH
 ###########
-RUN apt-get update && \
-apt-get -y install apt-transport-https
+# RUN apt-get update && apt-get -y install hmmer2 hmmer fasttree
 RUN wget http://dl.secondarymetabolites.org/antismash-stretch.list -O /etc/apt/sources.list.d/antismash.list && \
 wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | apt-key add -
-RUN apt-get update && \
-apt-get -y install hmmer2 hmmer diamond-aligner fasttree prodigal ncbi-blast+ muscle glimmerhmm
-
 RUN cd $SETUPDIR/ && \
-wget https://dl.secondarymetabolites.org/releases/6.1.1/antismash-6.1.1.tar.gz && tar -zxf antismash-6.1.1.tar.gz && \
-pip install ./antismash-6.1.1
+wget https://dl.secondarymetabolites.org/releases/7.0.0/antismash-7.0.0.tar.gz && tar -zxf antismash-7.0.0.tar.gz && \
+pip install ./antismash-7.0.0
 # RUN download-antismash-databases
 
 ##########################################################################################
@@ -603,10 +612,6 @@ mv nextflow /usr/local/bin/
 
 # GATK
 ######
-# Removing default openjdk because of GATK's requirement for an old version of Java.
-# RUN apt-get -y purge openjdk*
-# Installing openjdk 8
-# RUN apt-get -y install openjdk-8* ant
 RUN mkdir -p /apps/ && \
 cd /apps/ && \
 git clone https://github.com/broadinstitute/gatk.git && \
@@ -635,6 +640,65 @@ mv IGV_Linux_snapshot IGV
 ##########################################################################################
 ##########################################################################################
 
+# Taxonomic Classification & Microbiome
+#######################################
+#######################################
+
+# Centrifuge
+############
+
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/DaehwanKimLab/centrifuge.git && \
+cd $SETUPDIR/centrifuge/ && \
+make && make install
+
+# Pavian
+########
+RUN R -e  "remotes::install_github('fbreitwieser/pavian')"
+
+# Kraken2
+#########
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/DerrickWood/kraken2.git && \
+cd $SETUPDIR/kraken2/src/ && \
+make && \
+mkdir -p /apps/kraken2/ && \
+cd $SETUPDIR/kraken2/ && \
+bash install_kraken2.sh /usr/local/bin/
+
+RUN cd $SETUPDIR/ && \
+git clone https://github.com/jenniferlu717/Bracken.git && \
+cd $SETUPDIR/Bracken && \
+bash install_bracken.sh && \
+mv bracken /usr/local/bin/ && \
+mv bracken-build /usr/local/bin/
+
+# MetaPhlAn
+###########
+RUN pip install metaphlan graphlan panphlan humann
+# RUN metaphlan --install
+
+# mothur
+########
+RUN cd $SETUPDIR/ && \
+wget -t 0 http://drive5.com/uchime/uchime4.2.40_i86linux32 && \
+mv uchime4.2.40_i86linux32 /usr/local/bin/uchime && \
+chmod a+x /usr/local/bin/uchime
+
+RUN cd $SETUPDIR/ && \
+wget -t 0 https://github.com/mothur/mothur/releases/download/v1.48.0/Mothur.linux_8.zip && \
+unzip Mothur.linux_8.zip && \
+mv $SETUPDIR/mothur/mothur /usr/local/bin/
+
+# QIIME2
+########
+RUN cd $SETUPDIR/ && \
+wget https://data.qiime2.org/distro/core/qiime2-2023.5-py38-linux-conda.yml && \
+/usr/local/miniconda3/bin/conda env create -n qiime2-2023.5 --file qiime2-2023.5-py38-linux-conda.yml
+
+##########################################################################################
+##########################################################################################
+
 # Finishing
 ###########
 ###########
@@ -643,11 +707,11 @@ mv IGV_Linux_snapshot IGV
 
 RUN cd $SETUPDIR/
 RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
-RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep" >> $SETUPDIR/init.sh
+RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep:/apps/kraken2/" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
-RUN echo "echo '*********************************'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.2)'" >> $SETUPDIR/init.sh
-RUN echo "echo '*********************************'" >> $SETUPDIR/init.sh
+RUN echo "echo '****************************************'" >> $SETUPDIR/init.sh
+RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.3)'" >> $SETUPDIR/init.sh
+RUN echo "echo '****************************************'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
 RUN echo "echo 'For a list of installed tools, please visit: '" >> $SETUPDIR/init.sh
@@ -677,6 +741,7 @@ java -version ; \
 R --version ; \
 blastn -version ; \
 diamond --version ; \
+vsearch --version ; \
 muscle -version ; \
 mafft --version ; \
 # tophat --version ; \
@@ -708,8 +773,15 @@ gecco --version ; \
 deepbgc info ; \
 /apps/gatk/gatk --list ; \
 /apps/IGV/igv.sh --version ; \
+centrifuge --version ; \
+/apps/kraken2 --version ; \
+bracken --version ; \
+metaphlan --version ; \
+humann --version ; \
+uchime --version ; \
+mothur --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
-nextflow -version 
+nextflow -version
 
 ##########################################################################################
 ##########################################################################################
