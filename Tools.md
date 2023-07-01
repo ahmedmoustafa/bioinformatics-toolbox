@@ -5,17 +5,17 @@
 | Tool | Description |
 | ---- | ----------- |
 | [R](https://cloud.r-project.org/) | [The R Project for Statistical Computing](https://www.r-project.org/) |
-| [BioPerl](https://bioperl.org/) | |
-| [Biopython](https://biopython.org/) | |
+| [BioPerl](https://bioperl.org/) | [The Bioperl Project is an international association of users & developers of open source Perl tools for bioinformatics, genomics and life science](https://bioperl.org/) |
+| [Biopython](https://biopython.org/) | [The Biopython Project is an international association of developers of freely available Python tools for computational molecular biology]() |
 | [NCBI BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) | [Basic Local Alignment Search Tool](https://www.ncbi.nlm.nih.gov/pubmed/2231712) |
 | [DIAMOND](http://diamondsearch.org) | [Fast and sensitive protein alignment using DIAMOND](https://www.ncbi.nlm.nih.gov/pubmed/25402007) |
 | [HMMER](http://hmmer.org/) | [Accelerated Profile HMM Searches](https://www.ncbi.nlm.nih.gov/pubmed/22039361) |
 | [CD-HIT](http://weizhongli-lab.org/cd-hit/)  | [CD-HIT: a fast program for clustering and comparing large sets of protein or nucleotide sequences](https://www.ncbi.nlm.nih.gov/pubmed/16731699)  |
+| [VSEARCH](https://github.com/torognes/vsearch)  | [VSEARCH: a versatile open source tool for metagenomics](https://pubmed.ncbi.nlm.nih.gov/27781170/)  |
 | [MUSCLE](https://www.drive5.com/muscle/) | [MUSCLE: multiple sequence alignment with high accuracy and high throughput](https://www.ncbi.nlm.nih.gov/pubmed/15034147) |
 | [MAFFT](https://mafft.cbrc.jp/alignment/software/) | [MAFFT: a novel method for rapid multiple sequence alignment based on fast Fourier transform](https://www.ncbi.nlm.nih.gov/pubmed/12136088) |
-| [JAligner](https://github.com/ahmedmoustafa/JAligner) | [Open-source Java implementation of the Needleman–Wunsch and Smith-Waterman algorithms for biological pairwise sequence alignment with the affine gap penalty model](http://jaligner.sourceforge.net/) |
+| [JAligner](https://github.com/ahmedmoustafa/JAligner) | [Open-source Java implementation of the Smith-Waterman algorithms for biological pairwise sequence alignment](http://jaligner.sourceforge.net/) |
 | [BWA](https://github.com/lh3/bwa) | [Fast and accurate short read alignment with Burrows–Wheeler transform](https://www.ncbi.nlm.nih.gov/pubmed/19451168) |
-| [TopHat](https://ccb.jhu.edu/software/tophat/) | [Ultrafast and memory-efficient alignment of short DNA sequences to the human genome](https://www.ncbi.nlm.nih.gov/pubmed/19261174)<br>[TopHat2: accurate alignment of transcriptomes in the presence of insertions, deletions and gene fusions](https://www.ncbi.nlm.nih.gov/pubmed/23618408) |
 | [HISAT2](http://daehwankimlab.github.io/hisat2/) | [Graph-based genome alignment and genotyping with HISAT2 and HISAT-genotype](https://www.ncbi.nlm.nih.gov/pubmed/31375807) |
 | [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/) | [Fast gapped-read alignment with Bowtie 2](https://www.ncbi.nlm.nih.gov/pubmed/22388286) |
 | [STAR](https://github.com/alexdobin/STAR) | [STAR: ultrafast universal RNA-seq aligner](https://www.ncbi.nlm.nih.gov/pubmed/23104886) |
@@ -53,7 +53,15 @@
 | [antiSMASH](https://antismash.secondarymetabolites.org/) | [antiSMASH: Rapid identification, annotation and analysis of secondary metabolite biosynthesis gene clusters](https://pubmed.ncbi.nlm.nih.gov/21672958/) |
 | [DeepBGC](https://github.com/Merck/deepbgc) | [A deep learning genome-mining strategy for biosynthetic gene cluster prediction](https://www.ncbi.nlm.nih.gov/pubmed/31400112) |
 | [GECCO](https://gecco.embl.de/) | [Accurate de novo identification of biosynthetic gene clusters with GECCO](https://doi.org/10.1101/2021.05.03.442509) |
-| [Miniconda](https://docs.conda.io/en/latest/) | |
+| [Miniconda](https://docs.conda.io/en/latest/miniconda.html) | [Package, dependency and environment management for any language](https://docs.conda.io/en/latest/) |
 | [CD-HIT](https://github.com/weizhongli/cdhit) | [Cd-hit: a fast program for clustering and comparing large sets of protein or nucleotide sequences](https://www.ncbi.nlm.nih.gov/pubmed/16731699) |
 | [Nextflow](https://www.nextflow.io/) | [Nextflow enables reproducible computational workflows](https://pubmed.ncbi.nlm.nih.gov/28398311/) |
 | [GATK](https://gatk.broadinstitute.org/hc/en-us) | [The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data](https://pubmed.ncbi.nlm.nih.gov/20644199/) |
+| [Centrifuge](https://github.com/DaehwanKimLab/centrifuge) | [Centrifuge: rapid and sensitive classification of metagenomic sequences](https://pubmed.ncbi.nlm.nih.gov/27852649/) |
+| [Pavian](https://github.com/fbreitwieser/pavian) | [Pavian: interactive analysis of metagenomics data for microbiome studies and pathogen identification](https://pubmed.ncbi.nlm.nih.gov/31553437/) |
+| [Kraken2](https://github.com/DerrickWood/kraken2) | [Metagenome analysis using the Kraken software suite](https://pubmed.ncbi.nlm.nih.gov/36171387/) |
+| [Bracken](https://github.com/jenniferlu717/Bracken) | [Bracken: estimating species abundance in metagenomics data](https://doi.org/10.7717/peerj-cs.104) |
+| [MetaPhlAn](https://github.com/biobakery/MetaPhlAn) | [Extending and improving metagenomic taxonomic profiling with uncharacterized species using MetaPhlAn 4](https://pubmed.ncbi.nlm.nih.gov/36823356/) |
+| [HUMAnN](https://huttenhower.sph.harvard.edu/humann/) | [Integrating taxonomic, functional, and strain-level profiling of diverse microbial communities with bioBakery 3](https://pubmed.ncbi.nlm.nih.gov/33944776/) | 
+| [mothur](https://mothur.org/) | [Introducing mothur: Open-Source, Platform-Independent, Community-Supported Software for Describing and Comparing Microbial Communities](https://pubmed.ncbi.nlm.nih.gov/19801464/) |
+| [UCHIME](http://drive5.com/usearch/manual/uchime_algo.html) | [UCHIME improves sensitivity and speed of chimera detection](https://pubmed.ncbi.nlm.nih.gov/21700674/) |
