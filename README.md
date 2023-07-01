@@ -41,6 +41,6 @@ sudo docker run -it bioinformatics-toolbox
 
 ## Citation
 
-If you use `bioinformatics-toolbox` in your work, please cite [10.5281/zenodo.7362110](https://doi.org/10.5281/zenodo.7362110)
+If you use `bioinformatics-toolbox` in your work, please cite [10.5281/zenodo.8103969](https://doi.org/10.5281/zenodo.8103969)
 
 ---
