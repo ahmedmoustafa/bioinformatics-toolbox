@@ -662,7 +662,6 @@ RUN cd $SETUPDIR/ && \
 git clone https://github.com/DerrickWood/kraken2.git && \
 cd $SETUPDIR/kraken2/src/ && \
 make && \
-mkdir -p /apps/kraken2/ && \
 cd $SETUPDIR/kraken2/ && \
 bash install_kraken2.sh /usr/local/bin/
 
@@ -680,6 +679,7 @@ RUN pip install metaphlan graphlan panphlan humann
 
 # mothur
 ########
+RUN apt-get -y install libreadline*
 RUN cd $SETUPDIR/ && \
 wget -t 0 http://drive5.com/uchime/uchime4.2.40_i86linux32 && \
 mv uchime4.2.40_i86linux32 /usr/local/bin/uchime && \
@@ -705,9 +705,12 @@ wget https://data.qiime2.org/distro/core/qiime2-2023.5-py38-linux-conda.yml && \
 # Removing /usr/local/lib/libgomp.so.1 (seems to be broken) and use /usr/lib/x86_64-linux-gnu/libgomp.so.1 instead
 # RUN rm -fr /usr/local/lib/libgomp.so.1
 
+# Creating a soft link because mothur looks for libreadline.so.7
+RUN ln -s /usr/lib/x86_64-linux-gnu/libreadline.so.8 /usr/lib/x86_64-linux-gnu/libreadline.so.7
+
 RUN cd $SETUPDIR/
 RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
-RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep:/apps/kraken2/" >> $SETUPDIR/init.sh
+RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep:" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
 RUN echo "echo '****************************************'" >> $SETUPDIR/init.sh
 RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.3)'" >> $SETUPDIR/init.sh
@@ -774,8 +777,8 @@ deepbgc info ; \
 /apps/gatk/gatk --list ; \
 /apps/IGV/igv.sh --version ; \
 centrifuge --version ; \
-/apps/kraken2 --version ; \
-bracken --version ; \
+kraken2 --version ; \
+bracken -v ; \
 metaphlan --version ; \
 humann --version ; \
 uchime --version ; \
