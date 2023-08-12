@@ -1,7 +1,10 @@
+# This Dockerfile is based on https://github.com/ahmedmoustafa/bioinformatics-toolbox
 FROM ubuntu:22.04
 
-LABEL description="Bioinformatics Docker Container"
+LABEL description="ECRRM Genomics Commons Docker Image"
 LABEL maintainer="amoustafa@aucegypt.edu"
+LABEL version="1.0"
+
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
@@ -18,7 +21,7 @@ add-apt-repository restricted
 ##########################################################################################
 ##########################################################################################
 
-ARG SETUPDIR=/tmp/bioinformatics-toolbox-setup/
+ARG SETUPDIR=/tmp/genomics-commons-setup/
 RUN mkdir -p $SETUPDIR
 WORKDIR $SETUPDIR
 
@@ -406,179 +409,6 @@ chmod +x /usr/local/bin/sambamba
 ##########################################################################################
 ##########################################################################################
 
-# Assemblers
-############
-############
-
-# SPAdes
-########
-RUN cd $SETUPDIR/ && \
-wget -t 0 http://cab.spbu.ru/files/release3.15.5/SPAdes-3.15.5-Linux.tar.gz  && \
-tar zxvf SPAdes-3.15.5-Linux.tar.gz  && \
-mv SPAdes-3.15.5-Linux/bin/* /usr/local/bin/  && \
-mv SPAdes-3.15.5-Linux/share/* /usr/local/share/
-
-# ABySS
-#######
-# RUN cd $SETUPDIR/ && \
-# git clone https://github.com/sparsehash/sparsehash.git && \
-# cd $SETUPDIR/sparsehash && \
-# ./autogen.sh && ./configure && make && make install
-
-# RUN cd $SETUPDIR/ && \
-# git clone https://github.com/bcgsc/btllib.git && \
-# btllib/compile && \
-# mv $SETUPDIR/btllib/install/bin/ /usr/local/bin/ && \
-# mv $SETUPDIR/btllib/install/include/ /usr/local/include/ && \
-# mv $SETUPDIR/btllib/install/lib/ /usr/local/lib/
-
-# RUN cd $SETUPDIR/ && \
-# git clone https://github.com/bcgsc/abyss.git && \
-# cd $SETUPDIR/abyss && \
-# ./autogen.sh && ./configure && make && make install
-
-# Velvet
-########
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/dzerbino/velvet.git && \
-cd $SETUPDIR/velvet/ && \
-make && mv velvet* /usr/local/bin/
-
-# MEGAHIT
-#########
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/voutcn/megahit.git && \
-cd $SETUPDIR/megahit && \
-git submodule update --init && \
-mkdir build && \
-cd $SETUPDIR/megahit/build && \
-cmake .. -DCMAKE_BUILD_TYPE=Release && make -j4 && make simple_test  && make install
-
-# MetaVelvet
-############
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/hacchy/MetaVelvet.git && \
-cd $SETUPDIR/MetaVelvet && \
-make && mv meta-velvetg /usr/local/bin/
-
-##########################################################################################
-##########################################################################################
-
-# Phylogenetics
-###############
-###############
-
-# TreeTime
-##########
-RUN pip3 install phylo-treetime
-
-# FastTree
-##########
-RUN cd $SETUPDIR/ && \
-wget -t 0 http://www.microbesonline.org/fasttree/FastTree.c && \
-gcc -O3 -finline-functions -funroll-loops -Wall -o FastTree FastTree.c -lm && \
-gcc -DOPENMP -fopenmp -O3 -finline-functions -funroll-loops -Wall -o FastTreeMP FastTree.c -lm && \
-mv FastTree /usr/local/bin && \
-mv FastTreeMP /usr/local/bin
-
-# RAxML
-#######
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/stamatak/standard-RAxML.git && \
-cd $SETUPDIR/standard-RAxML  && \
-rm -fr *.o && make -f Makefile.gcc && cp raxmlHPC /usr/local/bin/  && \
-rm -fr *.o && make -f Makefile.SSE3.gcc && cp raxmlHPC-SSE3 /usr/local/bin/  && \
-rm -fr *.o && make -f Makefile.PTHREADS.gcc && cp raxmlHPC-PTHREADS /usr/local/bin/  && \
-rm -fr *.o && make -f Makefile.SSE3.PTHREADS.gcc && cp raxmlHPC-PTHREADS-SSE3 /usr/local/bin/  && \
-rm -fr *.o && make -f Makefile.MPI.gcc && cp raxmlHPC-MPI /usr/local/bin/  && \
-rm -fr *.o && make -f Makefile.SSE3.MPI.gcc && cp raxmlHPC-MPI-SSE3 /usr/local/bin/
-
-# RAxML NG
-##########
-RUN cd $SETUPDIR/ && \
-git clone --recursive https://github.com/amkozlov/raxml-ng && \
-cd $SETUPDIR/raxml-ng && \
-mkdir build && \
-cd $SETUPDIR/raxml-ng/build && \
-cmake .. && make && mv ../bin/raxml-ng /usr/local/bin/  && \
-cmake -DSTATIC_BUILD=ON -DENABLE_RAXML_SIMD=OFF -DENABLE_PLLMOD_SIMD=OFF .. && make && mv ../bin/raxml-ng-static /usr/local/bin/  && \
-cmake -DUSE_MPI=ON .. && make && mv ../bin/raxml-ng-mpi /usr/local/bin/
-
-# PhyML
-#######
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/stephaneguindon/phyml.git && \
-cd $SETUPDIR/phyml/ && \
-sh ./autogen.sh && ./configure && make && make install
-
-# Pplacer
-#########
-RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/matsen/pplacer/releases/download/v1.1.alpha19/pplacer-linux-v1.1.alpha19.zip && \
-unzip pplacer-linux-v1.1.alpha19.zip && \
-cd $SETUPDIR/pplacer-Linux-v1.1.alpha19/ && \
-mv guppy /usr/local/bin/ && \
-mv pplacer /usr/local/bin/ && \
-mv rppr /usr/local/bin/ && \
-cd $SETUPDIR/pplacer-Linux-v1.1.alpha19/scripts/ && \
-python setup.py install
-
-##########################################################################################
-##########################################################################################
-
-# Gene Prediction
-#################
-#################
-
-RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/hyattpd/Prodigal/releases/download/v2.6.3/prodigal.linux && \
-mv prodigal.linux /usr/local/bin/prodigal && \
-chmod +x /usr/local/bin/prodigal
-
-# GlimmerHMM
-############
-RUN cd $SETUPDIR/ && \
-wget -t 0 http://ccb.jhu.edu/software/glimmerhmm/dl/GlimmerHMM-3.0.4.tar.gz && \
-tar zxvf GlimmerHMM-3.0.4.tar.gz && \
-mv $SETUPDIR/GlimmerHMM/bin/glimmerhmm_linux_x86_64 /usr/local/bin/glimmerhmm && \
-chmod +x /usr/local/bin/glimmerhmm
-
-# Infernal
-##########
-RUN cd $SETUPDIR/ && \
-wget -t 0 http://eddylab.org/infernal/infernal-1.1.4.tar.gz && \
-tar zxvf infernal-1.1.4.tar.gz && \
-cd $SETUPDIR/infernal-1.1.4/ && \
-./configure && make && make install
-
-# GECCO
-#######
-RUN pip install gecco-tool
-
-# DeepBGC
-#########
-RUN apt-get update && \
-apt-get -y install software-properties-common && \
-add-apt-repository ppa:deadsnakes/ppa && \
-apt-get install -y python3-distutils python3-apt
-RUN pip install kiwisolver --force
-RUN pip install deepbgc
-RUN pip install deepbgc[hmm]
-# RUN deepbgc download
-
-# antiSMASH
-###########
-# RUN apt-get update && apt-get -y install hmmer2 hmmer fasttree
-RUN wget http://dl.secondarymetabolites.org/antismash-stretch.list -O /etc/apt/sources.list.d/antismash.list && \
-wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | apt-key add -
-RUN cd $SETUPDIR/ && \
-wget https://dl.secondarymetabolites.org/releases/7.0.0/antismash-7.0.0.tar.gz && tar -zxf antismash-7.0.0.tar.gz && \
-pip install ./antismash-7.0.0
-# RUN download-antismash-databases
-
-##########################################################################################
-##########################################################################################
-
 # Misc
 ######
 ######
@@ -627,77 +457,35 @@ mv IGV_Linux_snapshot IGV
 
 # VEP
 #####
-# RUN cd /apps/ && \
-# apt-get -y install cpanminus libtry-tiny-perl libperl4-corelibs-perl && \
-# cpanm autodie && \
-# cpanm Module::Build && \
-# cpanm Bio::DB::HTS::Tabix && \
-# git clone https://github.com/Ensembl/ensembl-vep.git && \
-# cd ensembl-vep && \
-# perl INSTALL.pl --NO_HTSLIB --AUTO alcfp --SPECIES homo_sapiens --ASSEMBLY GRCh38 --PLUGINS all
+RUN cd /apps/ && \
+apt-get -y install cpanminus libtry-tiny-perl libperl4-corelibs-perl && \
+cpanm autodie && \
+cpanm Module::Build && \
+cpanm Bio::DB::HTS::Tabix && \
+git clone https://github.com/Ensembl/ensembl-vep.git && \
+cd ensembl-vep
+# RUN cd /apps/ensembl-vep && perl INSTALL.pl --NO_HTSLIB --AUTO alcfp --SPECIES homo_sapiens --ASSEMBLY GRCh38 --PLUGINS all
 
 
 ##########################################################################################
 ##########################################################################################
 
-# Taxonomic Classification & Microbiome
-#######################################
-#######################################
+# Population Genetics
+#####################
+#####################
 
-# Centrifuge
+# PLINK 1.90
 ############
-
 RUN cd $SETUPDIR/ && \
-git clone https://github.com/DaehwanKimLab/centrifuge.git && \
-cd $SETUPDIR/centrifuge/ && \
-make && make install
+wget -t 0 https://s3.amazonaws.com/plink1-assets/plink_linux_x86_64_20230116.zip && \
+unzip plink_linux_x86_64_20230116.zip && \
+mv plink /usr/local/bin/ && \
+mv prettify /usr/local/bin/ && \
 
-# Pavian
-########
-RUN R -e  "remotes::install_github('fbreitwieser/pavian')"
-
-# Kraken2
-#########
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/DerrickWood/kraken2.git && \
-cd $SETUPDIR/kraken2/src/ && \
-make && \
-cd $SETUPDIR/kraken2/ && \
-bash install_kraken2.sh /usr/local/bin/
-
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/jenniferlu717/Bracken.git && \
-cd $SETUPDIR/Bracken && \
-bash install_bracken.sh && \
-mv bracken /usr/local/bin/ && \
-mv bracken-build /usr/local/bin/
-
-# MetaPhlAn
-###########
-RUN pip install metaphlan graphlan panphlan humann
-# RUN metaphlan --install
-
-# mothur
-########
-RUN apt-get -y install libreadline*
-RUN cd $SETUPDIR/ && \
-wget -t 0 http://drive5.com/uchime/uchime4.2.40_i86linux32 && \
-mv uchime4.2.40_i86linux32 /usr/local/bin/uchime && \
-chmod a+x /usr/local/bin/uchime
-
-RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/mothur/mothur/releases/download/v1.48.0/Mothur.linux_8.zip && \
-unzip Mothur.linux_8.zip && \
-mv $SETUPDIR/mothur/mothur /usr/local/bin/
-
-# QIIME2
-########
-RUN cd $SETUPDIR/ && \
-wget https://data.qiime2.org/distro/core/qiime2-2023.5-py38-linux-conda.yml && \
-/usr/local/miniconda3/bin/conda env create -n qiime2-2023.5 --file qiime2-2023.5-py38-linux-conda.yml
 
 ##########################################################################################
 ##########################################################################################
+
 
 # Finishing
 ###########
@@ -713,28 +501,25 @@ RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
 RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep:" >> $SETUPDIR/init.sh
 RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
 RUN echo "echo '****************************************'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.3)'" >> $SETUPDIR/init.sh
+RUN echo "echo 'Welcome to ECRRM Genomics Commons (v1.0)'" >> $SETUPDIR/init.sh
 RUN echo "echo '****************************************'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
+RUN echo "echo 'CRRM Genomics Commons is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
 RUN echo "echo 'For a list of installed tools, please visit: '" >> $SETUPDIR/init.sh
-RUN echo "echo 'https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/master/Tools.md'" >> $SETUPDIR/init.sh
+RUN echo "echo 'https://github.com/ECRRM/genomics-commons/blob/master/Tools.md'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
 RUN echo "echo 'If you would like to request adding certain tools or report a problem,'" >> $SETUPDIR/init.sh
-RUN echo "echo 'please submit an issue https://github.com/ahmedmoustafa/bioinformatics-toolbox/issues'" >> $SETUPDIR/init.sh
+RUN echo "echo 'please submit an issue https://github.com/ECRRM/genomics-commons/issues'" >> $SETUPDIR/init.sh
 RUN echo "echo " >> $SETUPDIR/init.sh
-RUN echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh
-RUN echo "echo '10.5281/zenodo.8103969'"  >> $SETUPDIR/init.sh
 RUN echo "echo 'Have fun!'" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
 RUN echo "echo ''" >> $SETUPDIR/init.sh
-RUN echo "/usr/bin/bash" >> $SETUPDIR/init.sh
 RUN echo "" >> $SETUPDIR/init.sh
-RUN mv $SETUPDIR/init.sh /etc/bioinformatics-toolbox.sh
-RUN chmod a+x /etc/bioinformatics-toolbox.sh
+RUN mv $SETUPDIR/init.sh /etc/genomics-commons.sh
+RUN chmod a+x /etc/genomics-commons.sh
 
 WORKDIR /root/
-ENTRYPOINT ["/etc/bioinformatics-toolbox.sh"]
+CMD ["/etc/genomics-commons.sh"]
 RUN rm -fr $SETUPDIR
 
 # Versions
@@ -754,10 +539,6 @@ STAR --version ; \
 salmon --version ; \
 bbmap.sh --version ; \
 hts_Stats --version ; \
-treetime --version ; \
-raxmlHPC -v ; \
-raxml-ng --version ; \
-pplacer --version ; \
 samtools  --version ; \
 bcftools  --version ; \
 bamtools --version ; \
@@ -765,26 +546,15 @@ vcftools --version ; \
 bedtools --version ; \
 deeptools --version ; \
 bedops --version ; \
-spades.py --version ; \
-megahit --version ; \
-spades.py --version ; \
 seqkit version ; \
 fastp --version ; \
 fqtrim -V ; \
 seqmagick --version ; \
-gecco --version ; \
-deepbgc info ; \
 /apps/gatk/gatk --list ; \
 /apps/IGV/igv.sh --version ; \
-centrifuge --version ; \
-kraken2 --version ; \
-bracken -v ; \
-metaphlan --version ; \
-humann --version ; \
-uchime --version ; \
-mothur --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
-nextflow -version
+nextflow -version ;\
+plink --version
 
 ##########################################################################################
 ##########################################################################################
