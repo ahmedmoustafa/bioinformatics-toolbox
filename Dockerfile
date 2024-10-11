@@ -1,17 +1,19 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
-LABEL description="Bioinformatics Docker Container"
+# Metadata
+LABEL description="Bioinformatics Docker Image"
 LABEL maintainer="amoustafa@aucegypt.edu"
 
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+# Suppress interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
 
 ##########################################################################################
 ##########################################################################################
 
 RUN apt-get update --fix-missing && \
 apt-get -y upgrade && \
-apt-get -y install apt-utils dialog software-properties-common
-RUN add-apt-repository universe && \
+apt-get -y install apt-utils dialog software-properties-common && \
+add-apt-repository universe && \
 add-apt-repository multiverse && \
 add-apt-repository restricted
 
@@ -55,44 +57,68 @@ dos2unix \
 git-lfs \
 apt-transport-https \
 autopoint po4a doxygen \
-libreadline-dev
+libreadline* \
+libharfbuzz-dev libfribidi-dev
 
 ##########################################################################################
 ##########################################################################################
 
-# Progamming
-############
-############
+# RUN ln -s /usr/bin/python3 /usr/bin/python && \
+RUN update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java && \
+update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac && \
+update-alternatives --set jar /usr/lib/jvm/java-17-openjdk-amd64/bin/jar
+
+##########################################################################################
+##########################################################################################
+
+# Virtual Environments
+######################
+######################
+
+# Miniconda
+###########
+RUN cd $SETUPDIR/ && wget -t 0 https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sh Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda3
+
+# Docker
+########
+RUN cd $SETUPDIR/ && curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+
+# Nexflow
+#########
+RUN cd $SETUPDIR/ && wget -qO- https://get.nextflow.io | bash && chmod +x nextflow && mv nextflow /usr/local/bin/
+
+##########################################################################################
+##########################################################################################
+
+# Bio Progamming
+################
+################
 
 # BioPerl
 #########
 RUN apt-get -y install bioperl
 
-# Biopython
-###########
-RUN pip3 install --no-cache-dir -U biopython numpy pandas matplotlib scipy seaborn statsmodels plotly bokeh scikit-learn tensorflow keras torch theano jupyterlab
+# Biopython & Other Python packages
+###################################
+RUN pip install --no-cache-dir --break-system-packages -U biopython numpy pandas matplotlib scipy seaborn statsmodels plotly bokeh scikit-learn tensorflow keras torch jupyterlab
 
 # R
 ###
-RUN apt-get update -qq && apt-get install --no-install-recommends software-properties-common dirmngr && \
+RUN apt update -qq && apt install -y --no-install-recommends software-properties-common dirmngr && \
 wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc && \
-add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
-
-RUN apt-get -y install --no-install-recommends r-base r-base-dev
-
-RUN R -e "install.packages (c('remotes, tidyverse', 'tidylog', 'readr', 'dplyr', 'knitr', 'printr', 'rmarkdown', 'shiny', \
-'ggplot2', 'gplots', 'plotly', 'rbokeh', 'circlize', 'RColorBrewer', 'formattable', \
-'reshape2', 'data.table', 'readxl', 'devtools', 'cowplot', 'tictoc', 'ggpubr', 'patchwork', 'reticulate', \
-'rpart', 'rpart.plot', 'randomForest', 'randomForestExplainer', 'randomForestSRC', 'ggRandomForests', 'xgboost', 'gbm', 'iml', \
+add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" && \
+apt-get -y install --no-install-recommends r-base r-base-dev && \
+R -e "install.packages (c('tidyverse', 'tidylog', 'readr', 'dplyr', 'reticulate', \
+'doParallel', 'devtools', 'tictoc',  \
+'knitr', 'printr', 'rmarkdown', 'shiny', \
+'gplots', 'cowplot', 'patchwork', 'plotly', 'ggpubr', 'rbokeh', 'circlize', 'RColorBrewer', \
+'formattable', 'reshape2', 'data.table', 'readxl',  \
 'gganimate', 'gifski', 'av', 'magick', 'ggvis', 'googleVis', \
-'pheatmap', 'Rtsne', 'vsn', 'vegan', 'BiocManager'), ask = FALSE)"
-
-RUN R -e "BiocManager::install(c('DESeq2', 'edgeR', 'dada2', 'phyloseq', 'metagenomeSeq', 'biomaRt'), ask = FALSE, update = TRUE)"
-
-##########################################################################################
-##########################################################################################
-
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+'randomForest', 'randomForestExplainer', 'randomForestSRC', 'ggRandomForests', \
+'rpart', 'rpart.plot', 'xgboost', 'gbm', 'iml', 'boot', 'pROC', 'pdp', 'vip', 'caret', \
+'Seurat', 'pheatmap', 'Rtsne', 'vsn', 'vegan', \
+'remotes', 'BiocManager'), ask = FALSE)" && \
+R -e "BiocManager::install(c('DESeq2', 'edgeR', 'dada2', 'phyloseq', 'metagenomeSeq', 'biomaRt'), ask = FALSE, update = TRUE)"
 
 ##########################################################################################
 ##########################################################################################
@@ -101,16 +127,20 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 ############
 ############
 
+# Had to reinstall camke for some reason
+RUN apt-get -y install --reinstall cmake
+
 RUN mkdir -p $SETUPDIR/ncbi && cd $SETUPDIR/ncbi && \
 git clone https://github.com/ncbi/ncbi-vdb.git && \
 git clone https://github.com/ncbi/ngs.git && \
 git clone https://github.com/ncbi/ngs-tools.git && \
-git clone https://github.com/ncbi/sra-tools.git && \
-cd $SETUPDIR/ncbi/ncbi-vdb && ./configure && make && make install && \
+git clone https://github.com/ncbi/sra-tools.git
+
+RUN cd $SETUPDIR/ncbi/ncbi-vdb && ./configure && make && make install && \
+cd $SETUPDIR/ncbi/ngs/ngs-java && ./configure && make && make install && \
 cd $SETUPDIR/ncbi/ngs && ./configure && make && make install && \
 cd $SETUPDIR/ncbi/ngs/ngs-sdk && ./configure && make && make install && \
 cd $SETUPDIR/ncbi/ngs/ngs-python && ./configure && make && make install && \
-cd $SETUPDIR/ncbi/ngs/ngs-java && ./configure && make && make install && \
 cd $SETUPDIR/ncbi/ngs/ngs-bam && ./configure && make && make install && \
 cd $SETUPDIR/ncbi/sra-tools && ./configure && make && make install && \
 cd $SETUPDIR/ncbi/ngs-tools && ./configure && make && make install
@@ -148,7 +178,7 @@ make && make install INSTALL="/usr/local/"
 # SeqKit
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/shenwei356/seqkit/releases/download/v2.4.0/seqkit_linux_amd64.tar.gz && \
+wget -t 0 https://github.com/shenwei356/seqkit/releases/download/v2.8.2/seqkit_linux_amd64.tar.gz && \
 tar zxvf seqkit_linux_amd64.tar.gz && \
 mv seqkit /usr/local/bin/
 
@@ -180,7 +210,7 @@ make && mv fqtrim /usr/local/bin/
 
 # seqmagick
 ###########
-RUN pip3 install --no-cache-dir -U seqmagick
+RUN pip install --no-cache-dir --break-system-packages -U seqmagick
 
 # seqtk
 #######
@@ -210,7 +240,7 @@ RUN apt-get -y install ncbi-blast+ hmmer hmmer2
 # Diamond
 #########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/bbuchfink/diamond/releases/download/v2.1.8/diamond-linux64.tar.gz && \
+wget -t 0 https://github.com/bbuchfink/diamond/releases/download/v2.1.9/diamond-linux64.tar.gz && \
 tar zxvf diamond-linux64.tar.gz && \
 mv diamond /usr/local/bin/
 
@@ -242,19 +272,19 @@ RUN apt-get -y install jaligner
 # MUSCLE
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/rcedgar/muscle/archive/refs/tags/5.1.0.tar.gz && \
-tar xvf 5.1.0.tar.gz && \
-cd $SETUPDIR/muscle-5.1.0/src && \
-make && mv Linux/muscle /usr/local/bin/
+wget -t 0 https://github.com/rcedgar/muscle/archive/refs/tags/v5.2.tar.gz && \
+tar xvf v5.2.tar.gz && \
+cd $SETUPDIR/muscle-5.2/src && \
+chmod a+x ./build_linux.bash && ./build_linux.bash && mv ../bin/muscle /usr/local/bin/
 
 # MAFFT
 #######
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://mafft.cbrc.jp/alignment/software/mafft-7.505-with-extensions-src.tgz && \
-tar zxvf mafft-7.505-with-extensions-src.tgz && \
-cd $SETUPDIR/mafft-7.505-with-extensions/core && \
+wget -t 0 https://mafft.cbrc.jp/alignment/software/mafft-7.525-with-extensions-src.tgz && \
+tar zxvf mafft-7.525-with-extensions-src.tgz && \
+cd $SETUPDIR/mafft-7.525-with-extensions/core && \
 make clean && make && make install && \
-cd $SETUPDIR/mafft-7.505-with-extensions/extensions/ && \
+cd $SETUPDIR/mafft-7.525-with-extensions/extensions/ && \
 make clean && make && make install
 
 # BWA
@@ -326,8 +356,8 @@ RUN R -e "BiocManager::install('pachterlab/sleuth', ask = FALSE, update = TRUE)"
 # BBMap
 #######
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://downloads.sourceforge.net/project/bbmap/BBMap_39.01.tar.gz && \
-tar zxvf BBMap_39.01.tar.gz && \
+wget -t 0 https://downloads.sourceforge.net/project/bbmap/BBMap_39.09.tar.gz && \
+tar zxvf BBMap_39.09.tar.gz && \
 mv bbmap/* /usr/local/bin/
 
 ##########################################################################################
@@ -383,10 +413,7 @@ make ; make install
 
 # deepTools
 ###########
-RUN cd $SETUPDIR/ && \
-git clone https://github.com/deeptools/deepTools && \
-cd $SETUPDIR/deepTools && \
-python setup.py install
+RUN pip install --break-system-packages deeptools
 
 # BEDOPS
 ########
@@ -398,9 +425,9 @@ make ; make install ; mv ./bin/* /usr/local/bin/
 # SAMBAMBA
 ##########
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/biod/sambamba/releases/download/v0.8.2/sambamba-0.8.2-linux-amd64-static.gz && \
-gzip -d sambamba-0.8.2-linux-amd64-static.gz && \
-mv sambamba-0.8.2-linux-amd64-static /usr/local/bin/sambamba && \
+wget -t 0 https://github.com/biod/sambamba/releases/download/v1.0.1/sambamba-1.0.1-linux-amd64-static.gz && \
+gzip -d sambamba-1.0.1-linux-amd64-static.gz && \
+mv sambamba-1.0.1-linux-amd64-static /usr/local/bin/sambamba && \
 chmod +x /usr/local/bin/sambamba
 
 ##########################################################################################
@@ -413,29 +440,16 @@ chmod +x /usr/local/bin/sambamba
 # SPAdes
 ########
 RUN cd $SETUPDIR/ && \
-wget -t 0 http://cab.spbu.ru/files/release3.15.5/SPAdes-3.15.5-Linux.tar.gz  && \
-tar zxvf SPAdes-3.15.5-Linux.tar.gz  && \
-mv SPAdes-3.15.5-Linux/bin/* /usr/local/bin/  && \
-mv SPAdes-3.15.5-Linux/share/* /usr/local/share/
+wget -t 0 https://github.com/ablab/spades/releases/download/v4.0.0/SPAdes-4.0.0-Linux.tar.gz  && \
+tar zxvf SPAdes-4.0.0-Linux.tar.gz  && \
+mv SPAdes-4.0.0-Linux/bin/* /usr/local/bin/  && \
+mv SPAdes-4.0.0-Linux/share/* /usr/local/share/
 
 # ABySS
 #######
-# RUN cd $SETUPDIR/ && \
-# git clone https://github.com/sparsehash/sparsehash.git && \
-# cd $SETUPDIR/sparsehash && \
-# ./autogen.sh && ./configure && make && make install
-
-# RUN cd $SETUPDIR/ && \
-# git clone https://github.com/bcgsc/btllib.git && \
-# btllib/compile && \
-# mv $SETUPDIR/btllib/install/bin/ /usr/local/bin/ && \
-# mv $SETUPDIR/btllib/install/include/ /usr/local/include/ && \
-# mv $SETUPDIR/btllib/install/lib/ /usr/local/lib/
-
-# RUN cd $SETUPDIR/ && \
-# git clone https://github.com/bcgsc/abyss.git && \
-# cd $SETUPDIR/abyss && \
-# ./autogen.sh && ./configure && make && make install
+# RUN cd $SETUPDIR/ && git clone https://github.com/sparsehash/sparsehash.git && cd $SETUPDIR/sparsehash && ./autogen.sh && ./configure && make && make install
+RUN /usr/local/miniconda3/bin/conda install -c bioconda -c conda-forge btllib
+RUN /usr/local/miniconda3/bin/conda install -c bioconda -c conda-forge abyss
 
 # Velvet
 ########
@@ -446,13 +460,21 @@ make && mv velvet* /usr/local/bin/
 
 # MEGAHIT
 #########
+# RUN cd $SETUPDIR/ && \
+# git clone https://github.com/voutcn/megahit.git && \
+# cd $SETUPDIR/megahit && \
+# git submodule update --init && \
+# mkdir build && \
+# cd $SETUPDIR/megahit/build && \
+# cmake .. -DCMAKE_BUILD_TYPE=Release && make -j4 && make simple_test  && make install
+
 RUN cd $SETUPDIR/ && \
-git clone https://github.com/voutcn/megahit.git && \
-cd $SETUPDIR/megahit && \
-git submodule update --init && \
-mkdir build && \
-cd $SETUPDIR/megahit/build && \
-cmake .. -DCMAKE_BUILD_TYPE=Release && make -j4 && make simple_test  && make install
+wget -t 0 https://github.com/voutcn/megahit/releases/download/v1.2.9/MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz && \
+tar zxvf MEGAHIT-1.2.9-Linux-x86_64-static.tar.gz && \
+cd $SETUPDIR/MEGAHIT-1.2.9-Linux-x86_64-static/bin/ && \
+mv * /usr/local/bin/ && \
+cd $SETUPDIR/MEGAHIT-1.2.9-Linux-x86_64-static/share/ && \
+mv * /usr/local/share/
 
 # MetaVelvet
 ############
@@ -470,7 +492,7 @@ make && mv meta-velvetg /usr/local/bin/
 
 # TreeTime
 ##########
-RUN pip3 install phylo-treetime
+RUN pip install --break-system-packages phylo-treetime
 
 # FastTree
 ##########
@@ -513,15 +535,15 @@ sh ./autogen.sh && ./configure && make && make install
 
 # Pplacer
 #########
-RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/matsen/pplacer/releases/download/v1.1.alpha19/pplacer-linux-v1.1.alpha19.zip && \
-unzip pplacer-linux-v1.1.alpha19.zip && \
-cd $SETUPDIR/pplacer-Linux-v1.1.alpha19/ && \
-mv guppy /usr/local/bin/ && \
-mv pplacer /usr/local/bin/ && \
-mv rppr /usr/local/bin/ && \
-cd $SETUPDIR/pplacer-Linux-v1.1.alpha19/scripts/ && \
-python setup.py install
+# RUN cd $SETUPDIR/ && \
+# wget -t 0 https://github.com/matsen/pplacer/releases/download/v1.1.alpha19/pplacer-linux-v1.1.alpha19.zip && \
+# unzip pplacer-linux-v1.1.alpha19.zip && \
+# cd $SETUPDIR/pplacer-Linux-v1.1.alpha19/ && \
+# mv guppy /usr/local/bin/ && \
+# mv pplacer /usr/local/bin/ && \
+# mv rppr /usr/local/bin/ && \
+# cd $SETUPDIR/pplacer-Linux-v1.1.alpha19/scripts/ && \
+# python setup.py install
 
 ##########################################################################################
 ##########################################################################################
@@ -546,24 +568,21 @@ chmod +x /usr/local/bin/glimmerhmm
 # Infernal
 ##########
 RUN cd $SETUPDIR/ && \
-wget -t 0 http://eddylab.org/infernal/infernal-1.1.4.tar.gz && \
-tar zxvf infernal-1.1.4.tar.gz && \
-cd $SETUPDIR/infernal-1.1.4/ && \
+wget -t 0 http://eddylab.org/infernal/infernal-1.1.5.tar.gz && \
+tar zxvf infernal-1.1.5.tar.gz && \
+cd $SETUPDIR/infernal-1.1.5/ && \
 ./configure && make && make install
 
 # GECCO
 #######
-RUN pip install gecco-tool
+RUN pip install --break-system-packages gecco-tool
 
 # DeepBGC
 #########
-RUN apt-get update && \
-apt-get -y install software-properties-common && \
-add-apt-repository ppa:deadsnakes/ppa && \
-apt-get install -y python3-distutils python3-apt
-RUN pip install kiwisolver --force
-RUN pip install deepbgc
-RUN pip install deepbgc[hmm]
+# Broken because of BioPython removed Bio.Alphabet
+# RUN pip install --break-system-packages kiwisolver --force
+# RUN pip install --break-system-packages deepbgc
+# RUN pip install --break-system-packages deepbgc[hmm]
 # RUN deepbgc download
 
 # antiSMASH
@@ -572,36 +591,9 @@ RUN pip install deepbgc[hmm]
 RUN wget http://dl.secondarymetabolites.org/antismash-stretch.list -O /etc/apt/sources.list.d/antismash.list && \
 wget -q -O- http://dl.secondarymetabolites.org/antismash.asc | apt-key add -
 RUN cd $SETUPDIR/ && \
-wget https://dl.secondarymetabolites.org/releases/7.0.0/antismash-7.0.0.tar.gz && tar -zxf antismash-7.0.0.tar.gz && \
-pip install ./antismash-7.0.0
+wget https://dl.secondarymetabolites.org/releases/7.1.0/antismash-7.1.0.tar.gz && tar -zxf antismash-7.1.0.tar.gz && \
+pip install --break-system-packages  ./antismash-7.1.0 --no-deps
 # RUN download-antismash-databases
-
-##########################################################################################
-##########################################################################################
-
-# Misc
-######
-######
-
-# Docker
-########
-
-# RUN cd $SETUPDIR/ && \
-# wget -t 0 https://get.docker.com/ -O docker.sh && \
-# sh docker.sh
-
-# Miniconda
-###########
-RUN cd $SETUPDIR/ && \
-wget -t 0 https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-sh Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda3
-
-# Nexflow
-#########
-RUN cd $SETUPDIR/ && \
-wget -qO- https://get.nextflow.io | bash && \
-chmod +x nextflow && \
-mv nextflow /usr/local/bin/
 
 ##########################################################################################
 ##########################################################################################
@@ -610,20 +602,22 @@ mv nextflow /usr/local/bin/
 #################
 #################
 
+RUN mkdir -p /apps/ 
+
 # GATK
 ######
-RUN mkdir -p /apps/ && \
-cd /apps/ && \
+RUN cd /apps/ && \
 git clone https://github.com/broadinstitute/gatk.git && \
 cd /apps/gatk && \
 ./gradlew
 
 # IGV
 #####
-RUN cd /apps/ && \
-wget -t 0 https://data.broadinstitute.org/igv/projects/downloads/snapshot/IGV_Linux_snapshot_WithJava.zip && \
-unzip IGV_Linux_snapshot_WithJava.zip && \
-mv IGV_Linux_snapshot IGV
+# RUN cd /apps/ && \
+# wget -t 0 https://data.broadinstitute.org/igv/projects/downloads/snapshot/IGV_Linux_snapshot_WithJava.zip && \
+# unzip IGV_Linux_snapshot_WithJava.zip && \
+# mv IGV_Linux_snapshot IGV
+# RUN rm /apps/IGV_Linux_snapshot_WithJava.zip
 
 # VEP
 #####
@@ -631,6 +625,7 @@ mv IGV_Linux_snapshot IGV
 # apt-get -y install cpanminus libtry-tiny-perl libperl4-corelibs-perl && \
 # cpanm autodie && \
 # cpanm Module::Build && \
+# cpanm Test::Warnings && \
 # cpanm Bio::DB::HTS::Tabix && \
 # git clone https://github.com/Ensembl/ensembl-vep.git && \
 # cd ensembl-vep && \
@@ -640,9 +635,9 @@ mv IGV_Linux_snapshot IGV
 ##########################################################################################
 ##########################################################################################
 
-# Taxonomic Classification & Microbiome
-#######################################
-#######################################
+# Microbiome
+############
+############
 
 # Centrifuge
 ############
@@ -674,27 +669,31 @@ mv bracken-build /usr/local/bin/
 
 # MetaPhlAn
 ###########
-RUN pip install metaphlan graphlan panphlan humann
+RUN pip install --break-system-packages metaphlan panphlan humann
+# RUN pip install --break-system-packages graphlan
 # RUN metaphlan --install
 
 # mothur
 ########
-RUN apt-get -y install libreadline*
+# RUN apt-get -y install libreadline*
 RUN cd $SETUPDIR/ && \
 wget -t 0 http://drive5.com/uchime/uchime4.2.40_i86linux32 && \
 mv uchime4.2.40_i86linux32 /usr/local/bin/uchime && \
 chmod a+x /usr/local/bin/uchime
 
 RUN cd $SETUPDIR/ && \
-wget -t 0 https://github.com/mothur/mothur/releases/download/v1.48.0/Mothur.linux_8.zip && \
+wget -t 0 https://github.com/mothur/mothur/releases/download/v1.48.1/Mothur.linux_8.zip && \
 unzip Mothur.linux_8.zip && \
 mv $SETUPDIR/mothur/mothur /usr/local/bin/
 
 # QIIME2
 ########
-RUN cd $SETUPDIR/ && \
-wget https://data.qiime2.org/distro/core/qiime2-2023.5-py38-linux-conda.yml && \
-/usr/local/miniconda3/bin/conda env create -n qiime2-2023.5 --file qiime2-2023.5-py38-linux-conda.yml
+
+## QIIME 2 Amplicon Distribution
+RUN /usr/local/miniconda3/bin/conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-linux-conda.yml
+
+## QIIME 2 Metagenome Distribution¶
+RUN /usr/local/miniconda3/bin/conda env create -n qiime2-metagenome-2024.5 --file https://data.qiime2.org/distro/metagenome/qiime2-metagenome-2024.5-py39-linux-conda.yml
 
 ##########################################################################################
 ##########################################################################################
@@ -708,34 +707,35 @@ wget https://data.qiime2.org/distro/core/qiime2-2023.5-py38-linux-conda.yml && \
 # Creating a soft link because mothur looks for libreadline.so.7
 RUN ln -s /usr/lib/x86_64-linux-gnu/libreadline.so.8 /usr/lib/x86_64-linux-gnu/libreadline.so.7
 
-RUN cd $SETUPDIR/
-RUN echo "#!/usr/bin/bash" > $SETUPDIR/init.sh
-RUN echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep:" >> $SETUPDIR/init.sh
-RUN echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh
-RUN echo "echo '****************************************'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Welcome to Bioinformatics Toolbox (v1.3)'" >> $SETUPDIR/init.sh
-RUN echo "echo '****************************************'" >> $SETUPDIR/init.sh
-RUN echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh
-RUN echo "echo " >> $SETUPDIR/init.sh
-RUN echo "echo 'For a list of installed tools, please visit: '" >> $SETUPDIR/init.sh
-RUN echo "echo 'https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/master/Tools.md'" >> $SETUPDIR/init.sh
-RUN echo "echo " >> $SETUPDIR/init.sh
-RUN echo "echo 'If you would like to request adding certain tools or report a problem,'" >> $SETUPDIR/init.sh
-RUN echo "echo 'please submit an issue https://github.com/ahmedmoustafa/bioinformatics-toolbox/issues'" >> $SETUPDIR/init.sh
-RUN echo "echo " >> $SETUPDIR/init.sh
-RUN echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh
-RUN echo "echo '10.5281/zenodo.8103969'"  >> $SETUPDIR/init.sh
-RUN echo "echo 'Have fun!'" >> $SETUPDIR/init.sh
-RUN echo "echo ''" >> $SETUPDIR/init.sh
-RUN echo "echo ''" >> $SETUPDIR/init.sh
-RUN echo "/usr/bin/bash" >> $SETUPDIR/init.sh
-RUN echo "" >> $SETUPDIR/init.sh
-RUN mv $SETUPDIR/init.sh /etc/bioinformatics-toolbox.sh
-RUN chmod a+x /etc/bioinformatics-toolbox.sh
+RUN cd $SETUPDIR/ && \
+    echo "#!/usr/bin/bash" > $SETUPDIR/init.sh && \
+    echo "export PATH=$PATH:/usr/local/ncbi/sra-tools/bin/:/usr/local/ncbi/ngs-tools/bin/:/usr/local/ncbi/ncbi-vdb/bin:/usr/local/miniconda3/bin:/apps/gatk:/apps/IGV:/apps/ensembl-vep:" >> $SETUPDIR/init.sh && \
+    echo "source /etc/profile.d/*" >> $SETUPDIR/init.sh && \
+    echo "echo '****************************************'" >> $SETUPDIR/init.sh && \
+    echo "echo 'Welcome to Bioinformatics Toolbox (v1.4)'" >> $SETUPDIR/init.sh && \
+    echo "echo '****************************************'" >> $SETUPDIR/init.sh && \
+    echo "echo 'Bioinformatics Toolbox is a docker container for bioinformatics'" >> $SETUPDIR/init.sh && \
+    echo "echo " >> $SETUPDIR/init.sh && \
+    echo "echo 'For a list of installed tools, please visit: '" >> $SETUPDIR/init.sh && \
+    echo "echo 'https://github.com/ahmedmoustafa/bioinformatics-toolbox/blob/master/Tools.md'" >> $SETUPDIR/init.sh && \
+    echo "echo " >> $SETUPDIR/init.sh && \
+    echo "echo 'If you would like to request adding certain tools or report a problem,'" >> $SETUPDIR/init.sh && \
+    echo "echo 'please submit an issue https://github.com/ahmedmoustafa/bioinformatics-toolbox/issues'" >> $SETUPDIR/init.sh && \
+    echo "echo " >> $SETUPDIR/init.sh && \
+    echo "echo 'If you use Bioinformatics Toolbox in your work, please cite: '" >> $SETUPDIR/init.sh && \
+    echo "echo '10.5281/zenodo.8103969'"  >> $SETUPDIR/init.sh && \
+    echo "echo 'Have fun!'" >> $SETUPDIR/init.sh && \
+    echo "echo ''" >> $SETUPDIR/init.sh && \
+    echo "echo ''" >> $SETUPDIR/init.sh && \
+    echo "/usr/bin/bash" >> $SETUPDIR/init.sh && \
+    mv $SETUPDIR/init.sh /etc/bioinformatics-toolbox.sh && \
+    chmod a+x /etc/bioinformatics-toolbox.sh
+
 
 WORKDIR /root/
 ENTRYPOINT ["/etc/bioinformatics-toolbox.sh"]
 RUN rm -fr $SETUPDIR
+RUN rm -rf /var/lib/apt/lists/*
 
 # Versions
 ##########
@@ -754,10 +754,11 @@ STAR --version ; \
 salmon --version ; \
 bbmap.sh --version ; \
 hts_Stats --version ; \
+FastTree ; \
 treetime --version ; \
 raxmlHPC -v ; \
 raxml-ng --version ; \
-pplacer --version ; \
+# pplacer --version ; \
 samtools  --version ; \
 bcftools  --version ; \
 bamtools --version ; \
@@ -767,15 +768,16 @@ deeptools --version ; \
 bedops --version ; \
 spades.py --version ; \
 megahit --version ; \
-spades.py --version ; \
+ABYSS --version ; \
 seqkit version ; \
 fastp --version ; \
 fqtrim -V ; \
 seqmagick --version ; \
 gecco --version ; \
-deepbgc info ; \
+# deepbgc info ; \
 /apps/gatk/gatk --list ; \
-/apps/IGV/igv.sh --version ; \
+# /apps/IGV/igv.sh --version ; \
+# vep ; \
 centrifuge --version ; \
 kraken2 --version ; \
 bracken -v ; \
@@ -784,7 +786,5 @@ humann --version ; \
 uchime --version ; \
 mothur --version ; \
 /usr/local/miniconda3/bin/conda --version ; \
-nextflow -version
-
-##########################################################################################
-##########################################################################################
+nextflow -version ; \
+docker --version
